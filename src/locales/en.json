@@ -1,0 +1,68 @@
+{
+  "title": "Ordle",
+  "description": "A Danish word guessing game",
+  "TopBar": {
+    "language": {
+      "label": "Language",
+      "options": {
+        "en": "English",
+        "da": "Danish"
+      }
+    },
+    "settings": {
+      "label": "Settings",
+      "hardMode": "Hard Mode",
+      "darkMode": "Dark Mode"
+    },
+    "howToPlay": {
+      "label": "How to Play",
+      "instructions": [
+        "Guess the Danish word in 6 tries.",
+        "Each guess must be a valid 5-letter word.",
+        "After each guess, the color of the tiles will change to show how close your guess was to the word."
+      ],
+      "legend": {
+        "legendTitle": "Legend",
+        "correct": "Correct letter, correct position",
+        "present": "Correct letter, wrong position",
+        "absent": "Letter not in word"
+      }
+    }
+  },
+  "FrontPage": {
+    "title": "Welcome to Ordle",
+    "description": "Guess the Danish word in six tries or less! Rotates daily with an new word.",
+    "wordCard": {
+      "title": "Ordle",
+      "wordClass": "noun",
+      "description_1": "1. A delightful Danish twist on the classic Wordle game, where 'ord' means 'word' and every day brings a new linguistic challenge.",
+      "description_2": "2. The daily ritual of guessing, celebrating, and sometimes lamenting your Danish vocabulary skills.",
+      "usageExample": "I got today's Ordle in three tries!"
+    },
+    "startGameButton": {
+      "label": "Start Game"
+    }
+  },
+  "GameBoard": {
+    "result": {
+      "defeat": "Game Over!",
+      "victory": "Well Done!"
+    },
+    "invalidWord": {
+      "notFound": "Word not found in dictionary",
+      "error": "Error checking guess"
+    }
+  },
+  "GameOverScreen": {
+    "title": {
+      "defeat": "Game Over!",
+      "victory": "Well Done!"
+    },
+    "totalGuesses": {
+      "lessThan3": "Impressive! You used just <1>{{count}}</1> guesses, and today's solution is:",
+      "between3and5": "Good job! You used <1>{{count}}</1> guesses, and today's solution is:",
+      "moreThan5": "Better luck next time. You used all <1>{{count}}</1> guesses, and today's solution is:"
+    },
+    "endComment": "Thank you for playing! Check back in <1>[{{countdown}}]</1> for the next word!"
+  }
+}

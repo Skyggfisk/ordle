@@ -1,0 +1,68 @@
+{
+  "title": "Ordle",
+  "description": "Et dansk gættespil",
+  "TopBar": {
+    "language": {
+      "label": "Sprog",
+      "options": {
+        "en": "Engelsk",
+        "da": "Dansk"
+      }
+    },
+    "settings": {
+      "label": "Indstillinger",
+      "hardMode": "Svært niveau",
+      "darkMode": "Mørk tilstand"
+    },
+    "howToPlay": {
+      "label": "Spilguide",
+      "instructions": [
+        "Gæt det danske ord på 6 forsøg.",
+        "Hvert gæt skal være et gyldigt 5-bogstavsord.",
+        "Efter hvert gæt vil farven på fliserne ændre sig for at vise, hvor tæt dit gæt var på ordet."
+      ],
+      "legend": {
+        "legendTitle": "Forklaring",
+        "correct": "Korrekt bogstav, korrekt position",
+        "present": "Korrekt bogstav, forkert position",
+        "absent": "Bogstav ikke i ordet"
+      }
+    }
+  },
+  "FrontPage": {
+    "title": "Velkommen til Ordle",
+    "description": "Gæt det danske ord på seks forsøg eller mindre. Gæt et nyt ord hver dag!",
+    "wordCard": {
+      "title": "Ordle",
+      "wordClass": "Navneord",
+      "description_1": "1. En fornøjelig dansk udgave af det klassiske spil Wordle, og hvor hver dag bringer en ny sproglig udfordring.",
+      "description_2": "2. Det daglige ritual hvor man gætter, fejrer, og nogle gange beklager sit danske ordforråd.",
+      "usageExample": "Jeg klarede dagens Ordle på tre forsøg!"
+    },
+    "startGameButton": {
+      "label": "Start spil"
+    }
+  },
+  "GameBoard": {
+    "result": {
+      "defeat": "Game Over!",
+      "victory": "Godt klaret!"
+    },
+    "invalidWord": {
+      "notFound": "Ord findes ikke i ordbogen",
+      "error": "Fejl ved kontrol af gæt"
+    }
+  },
+  "GameOverScreen": {
+    "title": {
+      "defeat": "Game Over!",
+      "victory": "Godt klaret!"
+    },
+    "totalGuesses": {
+      "lessThan3": "Imponerende! Du brugte kun <1>{{count}}</1> gæt, og løsningen var:",
+      "between3and5": "Godt gået! Du brugte <1>{{count}}</1> gæt, og løsningen var:",
+      "moreThan5": "Bedre held næste gang. Du brugte alle <1>{{count}}</1> gæt, dagens løsning er:"
+    },
+    "endComment": "Tak fordi du spillede! Tjek tilbage om <1>[{{countdown}}]</1> for det næste ord!"
+  }
+}
