@@ -1,7 +1,7 @@
 {
   "title": "Ordle",
   "description": "Et dansk gættespil",
-  "TopBar": {
+  "Header": {
     "language": {
       "label": "Sprog",
       "options": {

@@ -103,31 +103,31 @@ export const Header = () => {
         showMenu={showHowTo}
         setShowMenu={setShowHowTo}
         icon={<FaQuestionCircle className="text-lg" />}
-        label={t('TopBar.howToPlay.label')}
+        label={t('Header.howToPlay.label')}
       >
         <div className="w-64">
           <div className="mb-2 text-lg font-bold">
-            {t('TopBar.howToPlay.label')}
+            {t('Header.howToPlay.label')}
           </div>
           <ul className="mb-2 list-disc pl-5">
-            <li>{t('TopBar.howToPlay.instructions.0')}</li>
-            <li>{t('TopBar.howToPlay.instructions.1')}</li>
-            <li>{t('TopBar.howToPlay.instructions.2')}</li>
+            <li>{t('Header.howToPlay.instructions.0')}</li>
+            <li>{t('Header.howToPlay.instructions.1')}</li>
+            <li>{t('Header.howToPlay.instructions.2')}</li>
           </ul>
           <div className="mb-1 font-bold">
-            {t('TopBar.howToPlay.legend.legendTitle')}:
+            {t('Header.howToPlay.legend.legendTitle')}:
           </div>
           <div className="mb-1 flex items-center gap-2">
             <span className="inline-block h-5 w-5 rounded border border-gray-300 bg-green-600"></span>
-            <span>{t('TopBar.howToPlay.legend.correct')}</span>
+            <span>{t('Header.howToPlay.legend.correct')}</span>
           </div>
           <div className="mb-1 flex items-center gap-2">
             <span className="inline-block h-5 w-5 rounded border border-gray-300 bg-yellow-400"></span>
-            <span>{t('TopBar.howToPlay.legend.present')}</span>
+            <span>{t('Header.howToPlay.legend.present')}</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="inline-block h-5 w-5 rounded border border-gray-300 bg-gray-600"></span>
-            <span>{t('TopBar.howToPlay.legend.absent')}</span>
+            <span>{t('Header.howToPlay.legend.absent')}</span>
           </div>
         </div>
       </MenuButton>
@@ -137,7 +137,7 @@ export const Header = () => {
         showMenu={showLangSelect}
         setShowMenu={setShowLangSelect}
         icon={<FaGlobe className="text-lg" />}
-        label={t('TopBar.language.label')}
+        label={t('Header.language.label')}
       >
         <ul className="space-y-1">
           <li>
@@ -146,7 +146,7 @@ export const Header = () => {
               onClick={() => handleLangChange('en')}
             >
               <FlagGB className="mr-1 inline-block h-5 w-5 align-text-bottom" />
-              {t('TopBar.language.options.en')}
+              {t('Header.language.options.en')}
             </button>
           </li>
           <li>
@@ -155,7 +155,7 @@ export const Header = () => {
               onClick={() => handleLangChange('da')}
             >
               <FlagDK className="mr-1 inline-block h-5 w-5 align-text-bottom" />
-              {t('TopBar.language.options.da')}
+              {t('Header.language.options.da')}
             </button>
           </li>
         </ul>
@@ -166,10 +166,10 @@ export const Header = () => {
         showMenu={showSettings}
         setShowMenu={setShowSettings}
         icon={<FaCog className="text-lg" />}
-        label={t('TopBar.settings.label')}
+        label={t('Header.settings.label')}
       >
         <div className="mb-2 flex items-center justify-between gap-2">
-          <span className="text-nowrap">{t('TopBar.settings.hardMode')}</span>
+          <span className="text-nowrap">{t('Header.settings.hardMode')}</span>
           <label className="inline-flex cursor-pointer items-center">
             <input
               type="checkbox"
@@ -188,7 +188,7 @@ export const Header = () => {
           </label>
         </div>
         <div className="flex items-center justify-between gap-2">
-          <span className="text-nowrap">{t('TopBar.settings.darkMode')}</span>
+          <span className="text-nowrap">{t('Header.settings.darkMode')}</span>
           <label className="inline-flex cursor-pointer items-center">
             <input
               type="checkbox"
