@@ -73,7 +73,7 @@ function getInitialState(): GameState {
   return state;
 }
 
-export default function GameBoard({ onGameOver }: GameBoardProps) {
+export const GameBoard = ({ onGameOver }: GameBoardProps) => {
   const { t } = useTranslation();
 
   // State
@@ -292,4 +292,4 @@ export default function GameBoard({ onGameOver }: GameBoardProps) {
       <Keyboard keyFeedback={getKeyBoardFeedback(guesses, feedbackRows)} />
     </>
   );
-}
+};

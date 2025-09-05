@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { FaGlobe, FaQuestionCircle, FaCog } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 
-export function TopBar() {
+export const TopBar = () => {
   const { t, i18n } = useTranslation();
 
   // Refs for menus
@@ -248,4 +248,4 @@ export function TopBar() {
       </div>
     </div>
   );
-}
+};

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { wordService } from '../services/wordService';
 
-export default function GameOverScreen() {
+export const GameOverScreen = () => {
   const { t } = useTranslation();
 
   const gameData = JSON.parse(
@@ -85,4 +85,4 @@ export default function GameOverScreen() {
       </div>
     </div>
   );
-}
+};

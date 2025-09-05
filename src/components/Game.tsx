@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import GameBoard from './gameboard';
-import GameOverScreen from './GameOverScreen';
+import { GameBoard } from './GameBoard';
+import { GameOverScreen } from './GameOverScreen';
 import { useTranslation } from 'react-i18next';
 import { WordCard } from './WordCard';
 import { StartGameButton } from './StartGameButton';
 
-export function ShowGameBoard() {
+export const Game = () => {
   const { t } = useTranslation();
 
   const [showGame, setShowGame] = useState(false);
@@ -36,4 +36,4 @@ export function ShowGameBoard() {
       {gameOver && <GameOverScreen />}
     </>
   );
-}
+};

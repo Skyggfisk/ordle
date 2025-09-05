@@ -8,7 +8,7 @@ export interface KeyboardProps {
   keyFeedback?: Record<string, 'green' | 'yellow' | 'grey' | null>;
 }
 
-export function Keyboard({ keyFeedback = {} }: KeyboardProps) {
+export const Keyboard = ({ keyFeedback = {} }: KeyboardProps) => {
   const getBg = (key: string) => {
     if (keyFeedback[key] === 'green') return 'bg-green-600 text-white';
     if (keyFeedback[key] === 'yellow') return 'bg-yellow-400 text-white';
@@ -58,4 +58,4 @@ export function Keyboard({ keyFeedback = {} }: KeyboardProps) {
       </div>
     </div>
   );
-}
+};
