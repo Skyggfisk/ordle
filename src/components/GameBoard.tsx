@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Keyboard } from './Keyboard';
 import { wordService } from '../services/wordService';
+import { Notification } from './Notification';
 
 const NUM_ATTEMPTS = 6;
 const WORD_LENGTH = 5;
@@ -96,9 +97,6 @@ export const GameBoard = ({ onGameOver }: GameBoardProps) => {
   const [shakeRow, setShakeRow] = useState(false);
   const [bounceTile, setBounceTile] = useState<BounceTile>(null);
 
-  // Notification ref
-  const notificationMessage = useRef<HTMLDivElement | null>(null);
-
   // Check guess data
   const guessWord = (guesses[currentRow] ?? []).join('');
 
@@ -113,20 +111,6 @@ export const GameBoard = ({ onGameOver }: GameBoardProps) => {
     };
     localStorage.setItem(gameKey, JSON.stringify(updatedState));
   }, [guesses, currentRow, feedbackRows, revealedRows, result]);
-
-  // Notification animation
-  useEffect(() => {
-    if (notificationMessage.current && (result || invalidWord)) {
-      notificationMessage.current.style.opacity = '1';
-      notificationMessage.current.style.transform = 'translateY(0)';
-      setTimeout(() => {
-        if (notificationMessage.current) {
-          notificationMessage.current.style.opacity = '0';
-          notificationMessage.current.style.transform = 'translateY(-100%)';
-        }
-      }, 1500);
-    }
-  }, [result, invalidWord]);
 
   // Global key handler
   useEffect(() => {
@@ -234,23 +218,10 @@ export const GameBoard = ({ onGameOver }: GameBoardProps) => {
   return (
     <>
       <div className="relative mt-8 rounded bg-white/10 p-8 text-white">
-        {/* Floating notification above the board */}
-        <div
-          className="pointer-events-none absolute z-10 mb-4 flex w-full justify-center transition-all duration-500 ease-in-out"
-          ref={notificationMessage}
-          style={{
-            opacity: 0,
-            bottom: '100%',
-            left: 0,
-            transform: 'translateY(-16px)', // gap above board
-          }}
-        >
-          <div
-            className={`rounded bg-white/80 px-6 py-3 text-center text-2xl font-bold ${invalidWord ? 'text-red-400' : 'text-black'} shadow-lg`}
-          >
-            {result || invalidWord}
-          </div>
-        </div>
+        <Notification
+          message={result || invalidWord}
+          className={`rounded bg-white/80 px-6 py-3 text-center text-xl font-bold ${invalidWord ? 'text-red-500' : 'text-black'} shadow-lg`}
+        />
         <div className="flex flex-col gap-4">
           {guesses.map((guess, rowIdx) => {
             const showFeedback = rowIdx < currentRow || !!result;
