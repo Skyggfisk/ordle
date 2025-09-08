@@ -192,7 +192,6 @@ export const GameBoard = ({ onGameOver }: GameBoardProps) => {
       }
 
       if (checkGuess.correct) {
-        console.log('Correct!', checkGuess);
         setResult(t('GameBoard.result.victory'));
       } else if (currentRow < NUM_ATTEMPTS - 1) {
         setCurrentRow(currentRow + 1);
