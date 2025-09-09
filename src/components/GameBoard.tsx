@@ -1,24 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Keyboard } from './Keyboard';
-import { wordService } from '../services/wordService';
 import { Notification } from './Notification';
 import { BoardRow } from './BoardRow';
-
-const NUM_ATTEMPTS = 6;
-const WORD_LENGTH = 5;
-const today = new Date().toISOString().slice(0, 10);
-const gameKey = `ordle-game-${today}`;
-
-type GuessFeedback = 'green' | 'yellow' | 'grey' | null;
-
-type GameState = {
-  guesses: string[][];
-  currentRow: number;
-  feedbackRows: GuessFeedback[][];
-  revealedRows: boolean[][];
-  gameResult: string;
-};
+import {
+  useGameState,
+  WORD_LENGTH,
+  type GuessFeedback,
+} from '../hooks/useGameState';
 
 type BounceTile = {
   row: number;
@@ -52,172 +41,91 @@ function getKeyBoardFeedback(
   return feedback;
 }
 
-function getInitialState(): GameState {
-  const existingGame = localStorage.getItem(gameKey);
-  if (existingGame) {
-    return JSON.parse(existingGame);
-  }
-  const state = {
-    guesses: Array(NUM_ATTEMPTS)
-      .fill(null)
-      .map(() => Array(WORD_LENGTH).fill('')),
-    currentRow: 0,
-    feedbackRows: Array(NUM_ATTEMPTS)
-      .fill(null)
-      .map(() => Array(WORD_LENGTH).fill(null)),
-    revealedRows: Array(NUM_ATTEMPTS)
-      .fill(null)
-      .map(() => Array(WORD_LENGTH).fill(false)),
-    gameResult: '',
-    solution: null,
-  };
-  localStorage.setItem(gameKey, JSON.stringify(state));
-  return state;
-}
-
 export const GameBoard = ({ onGameOver }: GameBoardProps) => {
   const { t } = useTranslation();
 
-  // State
-  const [guesses, setGuesses] = useState<string[][]>(
-    () => getInitialState().guesses
-  );
-  const [currentRow, setCurrentRow] = useState(
-    () => getInitialState().currentRow
-  );
-  const [feedbackRows, setFeedbackRows] = useState<GuessFeedback[][]>(
-    () => getInitialState().feedbackRows
-  );
-  const [revealedRows, setRevealedRows] = useState<boolean[][]>(
-    () => getInitialState().revealedRows
-  );
-  const [result, setResult] = useState<string>(
-    () => getInitialState().gameResult || ''
-  );
+  const { state, addLetter, removeLetter, submitGuess } = useGameState();
+
   const [invalidWord, setInvalidWord] = useState<string>('');
   const [shakeRow, setShakeRow] = useState(false);
   const [bounceTile, setBounceTile] = useState<BounceTile>(null);
 
-  // Check guess data
-  const guessWord = (guesses[currentRow] ?? []).join('');
-
-  // Save game state to localStorage
-  useEffect(() => {
-    const updatedState: GameState = {
-      guesses,
-      currentRow,
-      feedbackRows,
-      revealedRows,
-      gameResult: result,
-    };
-    localStorage.setItem(gameKey, JSON.stringify(updatedState));
-  }, [guesses, currentRow, feedbackRows, revealedRows, result]);
-
   // Global key handler
   useEffect(() => {
-    if (result) return; // Don't listen if game is over
+    if (state.gameResult) return; // Don't listen if game is over
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      const key = e.key.toUpperCase();
+      const nextIdx = state.guesses[state.currentRow]?.findIndex(
+        (c) => c === ''
+      );
 
-      // Allow only valid characters (A-Z, ÆØÅ)
-      if (/^[A-ZÆØÅ]$/.test(key)) {
-        const nextIdx = guesses[currentRow]?.findIndex((c) => c === '');
-        if (nextIdx !== undefined && nextIdx !== -1) {
-          const newGuesses = guesses.map((row, r) =>
-            row.map((char, c) =>
-              r === currentRow && c === nextIdx ? key : char
-            )
-          );
-          setGuesses(newGuesses);
-          setBounceTile({ row: currentRow, col: nextIdx });
-          setTimeout(() => setBounceTile(null), 300);
-        }
-      } else if (e.key === 'Backspace') {
-        // Remove last filled cell in current row
-        const row = guesses[currentRow] ?? [];
-        const lastFilled = [...row].reverse().findIndex((c) => c !== '');
-        if (lastFilled !== -1) {
-          const idx = WORD_LENGTH - 1 - lastFilled;
-          const newGuesses = guesses.map((rowArr, r) =>
-            rowArr.map((char, c) => (r === currentRow && c === idx ? '' : char))
-          );
-          setGuesses(newGuesses);
-        }
+      if (e.key === 'Backspace') {
+        removeLetter();
       } else if (e.key === 'Enter') {
-        // Submit guess if row is filled
-        if ((guesses[currentRow] ?? []).every((c) => c !== '')) {
-          handleSubmit();
+        setInvalidWord('');
+        const result = submitGuess(state.guesses[state.currentRow] ?? []);
+        if (result === false) {
+          setInvalidWord(t('GameBoard.invalidWord.notFound'));
+          setShakeRow(true);
+          setTimeout(() => setShakeRow(false), 600);
+          return;
+        }
+      } else {
+        if (nextIdx !== undefined && nextIdx !== -1) {
+          const addLetterSuccess = addLetter(e.key);
+          if (addLetterSuccess) {
+            setBounceTile({ row: state.currentRow, col: nextIdx });
+            setTimeout(() => setBounceTile(null), 300);
+          }
         }
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [guesses, currentRow, result]);
+  }, [
+    state.guesses,
+    state.currentRow,
+    state.gameResult,
+    removeLetter,
+    submitGuess,
+    t,
+    addLetter,
+  ]);
 
   // Notify when game is over, after delay
   useEffect(() => {
-    if (result && onGameOver) {
+    if (state.gameResult && onGameOver) {
       const timer = setTimeout(() => {
         onGameOver();
       }, 2000);
       return () => clearTimeout(timer);
     }
-  }, [result, onGameOver, guesses]);
+  }, [state.gameResult, onGameOver, state.guesses]);
 
-  // Submit guess
-  const handleSubmit = async () => {
-    if (!(guesses[currentRow] ?? []).every((c) => c !== '') || result) return;
-    setInvalidWord('');
-    try {
-      // const result = await refetch();
-      const checkGuess = wordService.checkGuess(guessWord);
-      if (!checkGuess.wordExists) {
-        setInvalidWord(t('GameBoard.invalidWord.notFound'));
-        setShakeRow(true);
-        setTimeout(() => setShakeRow(false), 600);
-        return;
-      }
-
-      setFeedbackRows((prev) => {
-        const next = [...prev];
-        next[currentRow] = checkGuess.feedback ?? Array(WORD_LENGTH).fill(null);
-        return next;
-      });
-      // Reveal animation
-      if (checkGuess.feedback) {
-        checkGuess.feedback.forEach((_, i) => {
-          setTimeout(
-            () => {
-              setRevealedRows((prev) => {
-                const next = prev.map((row) => [...row]);
-                if (next[currentRow]) next[currentRow][i] = true;
-                return next;
-              });
-            },
-            i * 100 + 300
-          );
-        });
-      }
-
-      if (checkGuess.correct) {
-        setResult(t('GameBoard.result.victory'));
-      } else if (currentRow < NUM_ATTEMPTS - 1) {
-        setCurrentRow(currentRow + 1);
-      } else {
-        setResult(t('GameBoard.result.defeat'));
-      }
-    } catch {
-      setInvalidWord(t('GameBoard.invalidWord.error'));
+  const getNotificationMessage = ({
+    gameResult,
+    invalidWord,
+  }: {
+    gameResult?: string;
+    invalidWord?: string;
+  }) => {
+    if (gameResult === 'victory') {
+      return t('GameBoard.result.victory');
     }
+    if (gameResult === 'defeat') {
+      return t('GameBoard.result.defeat');
+    }
+    if (invalidWord) {
+      return t('GameBoard.invalidWord.notFound');
+    }
+    return '';
   };
 
   // Get feedback for a specific row
   const getRowFeedback = (rowIdx: number): GuessFeedback[] => {
-    if (rowIdx < currentRow || !!result) {
-      return feedbackRows[rowIdx] ?? Array(WORD_LENGTH).fill(null);
+    if (rowIdx < state.currentRow || !!state.gameResult) {
+      return state.feedbackRows[rowIdx] ?? Array(WORD_LENGTH).fill(null);
     }
     return Array(WORD_LENGTH).fill(null);
   };
@@ -226,19 +134,22 @@ export const GameBoard = ({ onGameOver }: GameBoardProps) => {
     <>
       <div className="relative mt-8 rounded bg-white/10 p-8 text-white">
         <Notification
-          message={result || invalidWord}
+          message={getNotificationMessage({
+            gameResult: state.gameResult,
+            invalidWord,
+          })}
           className={`rounded bg-white/80 px-6 py-3 text-center text-xl font-bold ${invalidWord ? 'text-red-500' : 'text-black'} shadow-lg`}
         />
         <div className="flex flex-col gap-4">
-          {guesses.map((guess, rowIdx) => {
+          {state.guesses.map((guess, rowIdx) => {
             const feedback = getRowFeedback(rowIdx);
             return (
               <BoardRow
                 key={rowIdx}
-                shake={rowIdx === currentRow && shakeRow}
+                shake={rowIdx === state.currentRow && shakeRow}
                 tiles={guess}
                 feedback={feedback}
-                revealed={revealedRows[rowIdx]}
+                revealed={state.revealedRows[rowIdx]}
                 bounceTile={bounceTile}
                 rowIdx={rowIdx}
               />
@@ -246,7 +157,9 @@ export const GameBoard = ({ onGameOver }: GameBoardProps) => {
           })}
         </div>
       </div>
-      <Keyboard keyFeedback={getKeyBoardFeedback(guesses, feedbackRows)} />
+      <Keyboard
+        keyFeedback={getKeyBoardFeedback(state.guesses, state.feedbackRows)}
+      />
     </>
   );
 };
