@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Keyboard } from './Keyboard';
 import { wordService } from '../services/wordService';
 import { Notification } from './Notification';
+import { BoardRow } from './BoardRow';
 
 const NUM_ATTEMPTS = 6;
 const WORD_LENGTH = 5;
@@ -156,6 +157,16 @@ export const GameBoard = ({ onGameOver }: GameBoardProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [guesses, currentRow, result]);
 
+  // Notify when game is over, after delay
+  useEffect(() => {
+    if (result && onGameOver) {
+      const timer = setTimeout(() => {
+        onGameOver();
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [result, onGameOver, guesses]);
+
   // Submit guess
   const handleSubmit = async () => {
     if (!(guesses[currentRow] ?? []).every((c) => c !== '') || result) return;
@@ -203,17 +214,14 @@ export const GameBoard = ({ onGameOver }: GameBoardProps) => {
     }
   };
 
-  // Notify when game is over, after delay
-  useEffect(() => {
-    if (result && onGameOver) {
-      const timer = setTimeout(() => {
-        onGameOver();
-      }, 2000);
-      return () => clearTimeout(timer);
+  // Get feedback for a specific row
+  const getRowFeedback = (rowIdx: number): GuessFeedback[] => {
+    if (rowIdx < currentRow || !!result) {
+      return feedbackRows[rowIdx] ?? Array(WORD_LENGTH).fill(null);
     }
-  }, [result, onGameOver, guesses]);
+    return Array(WORD_LENGTH).fill(null);
+  };
 
-  // Render board
   return (
     <>
       <div className="relative mt-8 rounded bg-white/10 p-8 text-white">
@@ -223,38 +231,17 @@ export const GameBoard = ({ onGameOver }: GameBoardProps) => {
         />
         <div className="flex flex-col gap-4">
           {guesses.map((guess, rowIdx) => {
-            const showFeedback = rowIdx < currentRow || !!result;
-            const feedback = showFeedback
-              ? (feedbackRows[rowIdx] ?? Array(WORD_LENGTH).fill(null))
-              : Array(WORD_LENGTH).fill(null);
-            const shake = rowIdx === currentRow && shakeRow;
+            const feedback = getRowFeedback(rowIdx);
             return (
-              <div
+              <BoardRow
                 key={rowIdx}
-                className={`flex justify-center gap-2 ${shake ? 'shake' : ''}`}
-              >
-                {guess.map((char, letterIdx) => {
-                  // Flip animation with cascade
-                  const flip = showFeedback && feedback[letterIdx] != null;
-                  const delay = flip ? `${letterIdx * 100}ms` : undefined;
-                  let bg = 'bg-white/20';
-                  if (flip && revealedRows[rowIdx]?.[letterIdx]) {
-                    if (feedback[letterIdx] === 'green') bg = 'bg-green-600';
-                    else if (feedback[letterIdx] === 'yellow')
-                      bg = 'bg-yellow-400';
-                    else if (feedback[letterIdx] === 'grey') bg = 'bg-gray-600';
-                  }
-                  return (
-                    <span
-                      key={letterIdx}
-                      className={`flex h-12 w-12 items-center justify-center rounded border border-white/30 text-center text-2xl font-bold select-none ${bg} ${flip ? 'flip' : ''} ${bounceTile?.row === rowIdx && bounceTile?.col === letterIdx ? 'bounce' : ''}`}
-                      style={flip ? { animationDelay: delay } : undefined}
-                    >
-                      {char}
-                    </span>
-                  );
-                })}
-              </div>
+                shake={rowIdx === currentRow && shakeRow}
+                tiles={guess}
+                feedback={feedback}
+                revealed={revealedRows[rowIdx]}
+                bounceTile={bounceTile}
+                rowIdx={rowIdx}
+              />
             );
           })}
         </div>

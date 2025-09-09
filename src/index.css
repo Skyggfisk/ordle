@@ -29,6 +29,7 @@
 
 .flip {
   animation: flip 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  animation-delay: var(--flip-delay, 0ms);
   backface-visibility: hidden;
 }
 
