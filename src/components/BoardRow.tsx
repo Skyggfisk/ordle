@@ -1,10 +1,12 @@
 import { LetterTile } from './LetterTile';
 
+import type { BounceTile, GuessFeedback } from '../types/game';
+
 interface BoardRowProps {
   tiles: string[];
-  feedback: ('green' | 'yellow' | 'grey' | null)[];
+  feedback: GuessFeedback[];
   revealed: boolean[];
-  bounceTile: { row: number; col: number } | null;
+  bounceTile: BounceTile;
   rowIdx: number;
   shake: boolean;
 }

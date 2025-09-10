@@ -1,7 +1,6 @@
 import { useReducer, useEffect } from 'react';
-import { wordService, type CheckGuessResult } from '../services/wordService';
-
-export type GuessFeedback = 'green' | 'yellow' | 'grey' | null;
+import { wordService } from '../services/wordService';
+import type { CheckGuessResult, GuessFeedback } from '../types/game';
 
 type GameState = {
   guesses: string[][];

@@ -1,3 +1,5 @@
+import { FEEDBACK, type GuessFeedback } from '../types/game';
+
 const KEYS = [
   ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
   ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Æ'],
@@ -5,14 +7,14 @@ const KEYS = [
 ];
 
 export interface KeyboardProps {
-  keyFeedback?: Record<string, 'green' | 'yellow' | 'grey' | null>;
+  keyFeedback?: Record<string, GuessFeedback>;
 }
 
 export const Keyboard = ({ keyFeedback = {} }: KeyboardProps) => {
   const getBg = (key: string) => {
-    if (keyFeedback[key] === 'green') return 'bg-green-600 text-white';
-    if (keyFeedback[key] === 'yellow') return 'bg-yellow-400 text-white';
-    if (keyFeedback[key] === 'grey') return 'bg-gray-600 text-white';
+    if (keyFeedback[key] === FEEDBACK.GREEN) return 'bg-green-600 text-white';
+    if (keyFeedback[key] === FEEDBACK.YELLOW) return 'bg-yellow-400 text-white';
+    if (keyFeedback[key] === FEEDBACK.GREY) return 'bg-gray-600 text-white';
     return 'bg-white/20 text-black';
   };
 

@@ -1,7 +1,8 @@
-import type React from 'react';
+import { FEEDBACK } from '../types/game';
+import type { GuessFeedback } from '../types/game';
 
 interface LetterTileProps {
-  feedback: 'green' | 'yellow' | 'grey' | null;
+  feedback: GuessFeedback;
   revealed: boolean;
   bounce: boolean;
   letter: string;
@@ -19,9 +20,9 @@ export const LetterTile = ({
 }: LetterTileProps) => {
   let bg = 'bg-white/20';
   if (revealed) {
-    if (feedback === 'green') bg = 'bg-green-600';
-    else if (feedback === 'yellow') bg = 'bg-yellow-400';
-    else if (feedback === 'grey') bg = 'bg-gray-600';
+    if (feedback === FEEDBACK.GREEN) bg = 'bg-green-600';
+    else if (feedback === FEEDBACK.YELLOW) bg = 'bg-yellow-400';
+    else if (feedback === FEEDBACK.GREY) bg = 'bg-gray-600';
   }
 
   return (

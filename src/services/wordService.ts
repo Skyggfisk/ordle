@@ -1,12 +1,6 @@
 import { words } from '../words';
-
-export type GuessFeedback = 'green' | 'yellow' | 'grey';
-export type CheckGuessResult = {
-  feedback?: GuessFeedback[];
-  correct: boolean;
-  wordExists: boolean;
-  solution: string | undefined;
-};
+import type { CheckGuessResult, GuessFeedback } from '../types/game';
+import { FEEDBACK } from '../types/game';
 
 const msPerDay = 1000 * 60 * 60 * 24;
 
@@ -26,13 +20,13 @@ function checkGuess(guess: string): CheckGuessResult {
       solution,
     };
   }
-  const feedback: GuessFeedback[] = Array(solution.length).fill('grey');
+  const feedback: GuessFeedback[] = Array(solution.length).fill(FEEDBACK.GREY);
   const solutionArr = solution.split('');
   const guessArr = guess.toUpperCase().split('');
   // First pass: greens
   solutionArr.forEach((char, idx) => {
     if (guessArr[idx] === char) {
-      feedback[idx] = 'green';
+      feedback[idx] = FEEDBACK.GREEN;
       solutionArr[idx] = '';
       guessArr[idx] = '';
     }
@@ -40,11 +34,11 @@ function checkGuess(guess: string): CheckGuessResult {
   // Second pass: yellows
   guessArr.forEach((char, idx) => {
     if (char && solutionArr.includes(char)) {
-      feedback[idx] = 'yellow';
+      feedback[idx] = FEEDBACK.YELLOW;
       solutionArr[solutionArr.indexOf(char)] = '';
     }
   });
-  const correct = feedback.every((f) => f === 'green');
+  const correct = feedback.every((f) => f === FEEDBACK.GREEN);
   return {
     feedback,
     correct,

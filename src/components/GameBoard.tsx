@@ -1,44 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Keyboard } from './Keyboard';
+import { getKeyboardFeedback } from './Keyboard.utils';
 import { Notification } from './Notification';
 import { BoardRow } from './BoardRow';
-import {
-  useGameState,
-  WORD_LENGTH,
-  type GuessFeedback,
-} from '../hooks/useGameState';
-
-type BounceTile = {
-  row: number;
-  col: number;
-} | null;
+import { useGameState, WORD_LENGTH } from '../hooks/useGameState';
+import type { BounceTile, GuessFeedback } from '../types/game';
 
 interface GameBoardProps {
   onGameOver?: () => void;
-}
-
-// Sync guess feedback to the keyboard
-function getKeyBoardFeedback(
-  guesses: string[][],
-  feedbackRows: GuessFeedback[][]
-): Record<string, GuessFeedback> {
-  const feedback: Record<string, GuessFeedback> = {};
-  guesses.forEach((guess, rowIdx) => {
-    guess.forEach((char, colIdx) => {
-      const fb = feedbackRows[rowIdx]?.[colIdx];
-      if (!char || !fb) return;
-      // Prioritize green > yellow > grey
-      if (
-        fb === 'green' ||
-        (fb === 'yellow' && feedback[char] !== 'green') ||
-        (fb === 'grey' && !feedback[char])
-      ) {
-        feedback[char] = fb;
-      }
-    });
-  });
-  return feedback;
 }
 
 export const GameBoard = ({ onGameOver }: GameBoardProps) => {
@@ -158,7 +128,7 @@ export const GameBoard = ({ onGameOver }: GameBoardProps) => {
         </div>
       </div>
       <Keyboard
-        keyFeedback={getKeyBoardFeedback(state.guesses, state.feedbackRows)}
+        keyFeedback={getKeyboardFeedback(state.guesses, state.feedbackRows)}
       />
     </>
   );
