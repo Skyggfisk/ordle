@@ -1,19 +1,33 @@
 import { useReducer, useEffect } from 'react';
 import { wordService } from '../services/wordService';
-import type { CheckGuessResult, GuessFeedback } from '../types/game';
+import {
+  type CheckGuessResult,
+  type GameResult,
+  type GuessFeedback,
+  GAME_RESULT,
+} from '../types/game';
+
+const GAME_ACTION = {
+  ADD_LETTER: 'ADD_LETTER',
+  REMOVE_LETTER: 'REMOVE_LETTER',
+  SUBMIT_GUESS: 'SUBMIT_GUESS',
+} as const;
 
 type GameState = {
   guesses: string[][];
   currentRow: number;
   feedbackRows: GuessFeedback[][];
   revealedRows: boolean[][];
-  gameResult: string;
+  gameResult: GameResult;
 };
 
 type GameAction =
-  | { type: 'ADD_LETTER'; letter: string }
-  | { type: 'REMOVE_LETTER' }
-  | { type: 'SUBMIT_GUESS'; checkGuessResult: CheckGuessResult };
+  | { type: typeof GAME_ACTION.ADD_LETTER; letter: string }
+  | { type: typeof GAME_ACTION.REMOVE_LETTER }
+  | {
+      type: typeof GAME_ACTION.SUBMIT_GUESS;
+      checkGuessResult: CheckGuessResult;
+    };
 
 export const WORD_LENGTH = 5;
 const NUM_ATTEMPTS = 6;
@@ -36,7 +50,7 @@ function getInitialState(): GameState {
     revealedRows: Array(NUM_ATTEMPTS)
       .fill(null)
       .map(() => Array(WORD_LENGTH).fill(false)),
-    gameResult: '',
+    gameResult: GAME_RESULT.UNSETTLED,
     solution: null,
   };
   localStorage.setItem(gameKey, JSON.stringify(state));
@@ -45,7 +59,7 @@ function getInitialState(): GameState {
 
 function gameReducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
-    case 'ADD_LETTER':
+    case GAME_ACTION.ADD_LETTER:
       return {
         ...state,
         guesses: state.guesses.map((row, r) =>
@@ -56,7 +70,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
           )
         ),
       };
-    case 'REMOVE_LETTER':
+    case GAME_ACTION.REMOVE_LETTER:
       return {
         ...state,
         guesses: state.guesses.map((row, r) => {
@@ -68,7 +82,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
           return row.map((char, c) => (c === lastFilled ? '' : char));
         }),
       };
-    case 'SUBMIT_GUESS':
+    case GAME_ACTION.SUBMIT_GUESS:
       return {
         ...state,
         feedbackRows: state.feedbackRows.map((row, r) =>
@@ -80,10 +94,10 @@ function gameReducer(state: GameState, action: GameAction): GameState {
           r === state.currentRow ? row.map(() => true) : row
         ),
         gameResult: action.checkGuessResult.correct
-          ? 'victory'
+          ? GAME_RESULT.VICTORY
           : state.currentRow === NUM_ATTEMPTS - 1
-            ? 'defeat'
-            : '',
+            ? GAME_RESULT.DEFEAT
+            : GAME_RESULT.UNSETTLED,
         guesses: state.guesses,
         currentRow: state.currentRow + 1,
       };
@@ -104,20 +118,28 @@ export const useGameState = () => {
     // Only allow valid letters (A-Z, ÆØÅ)
     const upperLetter = letter.toUpperCase();
     if (!/^[A-ZÆØÅ]$/.test(upperLetter)) return false;
-    dispatch({ type: 'ADD_LETTER', letter: upperLetter });
+    dispatch({ type: GAME_ACTION.ADD_LETTER, letter: upperLetter });
     return true;
   };
 
   const removeLetter = () => {
-    dispatch({ type: 'REMOVE_LETTER' });
+    dispatch({ type: GAME_ACTION.REMOVE_LETTER });
   };
 
-  const submitGuess = (guess: string[]) => {
+  const submitGuess = (
+    guess: string[],
+    onResult?: (result: GameResult) => void
+  ) => {
     // Only submit if row is filled
     if (!guess.every((c) => c !== '')) return;
     const checkGuessResult = wordService.checkGuess(guess.join(''));
     if (checkGuessResult.wordExists) {
-      dispatch({ type: 'SUBMIT_GUESS', checkGuessResult });
+      dispatch({ type: GAME_ACTION.SUBMIT_GUESS, checkGuessResult });
+      if (checkGuessResult.correct) {
+        if (onResult) onResult(GAME_RESULT.VICTORY);
+      } else if (state.currentRow === NUM_ATTEMPTS - 1) {
+        if (onResult) onResult(GAME_RESULT.DEFEAT);
+      }
     }
     return checkGuessResult.wordExists;
   };

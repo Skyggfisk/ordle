@@ -1,5 +1,4 @@
-import type { GuessFeedback } from '../types/game';
-import { FEEDBACK } from '../types/game';
+import { FEEDBACK, type GuessFeedback } from '../types/game';
 
 // Utility to sync guess feedback to the keyboard
 export function getKeyboardFeedback(

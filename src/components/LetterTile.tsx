@@ -1,5 +1,4 @@
-import { FEEDBACK } from '../types/game';
-import type { GuessFeedback } from '../types/game';
+import { FEEDBACK, type GuessFeedback } from '../types/game';
 
 interface LetterTileProps {
   feedback: GuessFeedback;
