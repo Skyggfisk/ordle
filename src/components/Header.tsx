@@ -68,8 +68,8 @@ export const Header = () => {
   useEffect(() => {
     try {
       const config = storage.getConfig();
-      setHardMode(config.hardMode);
-      setDarkMode(config.darkMode);
+      setHardMode(!!config.hardMode);
+      setDarkMode(!!config.darkMode);
     } catch {
       setHardMode(false);
       setDarkMode(false);
@@ -77,7 +77,7 @@ export const Header = () => {
     setLoaded(true);
   }, []);
 
-  // Automatically sync state and storage, but only after initial load
+  // Automatically sync config state and storage, but only after initial load
   useEffect(() => {
     if (loaded) {
       storage.setConfig({ hardMode, darkMode });
