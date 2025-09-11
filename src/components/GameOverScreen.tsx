@@ -1,22 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { wordService } from '../services/wordService';
-import { GAME_RESULT, type GameResult } from '../types/game';
+import { storage } from '../services/storage';
+import { GAME_RESULT } from '../types/game';
 
 export const GameOverScreen = () => {
   const { t } = useTranslation();
-
-  const gameData = JSON.parse(
-    localStorage.getItem(
-      `ordle-game-${new Date().toISOString().slice(0, 10)}`
-    ) || '{}'
-  );
+  const gameData = storage.getCurrentGameState();
   const wotd = wordService.getWotd();
-
-  const result: GameResult = gameData.gameResult || GAME_RESULT.UNSETTLED;
-  const totalGuesses = gameData.currentRow;
-
+  const result = gameData?.gameResult || GAME_RESULT.UNSETTLED;
+  const totalGuesses = gameData?.currentRow || 0;
   const [countdown, setCountdown] = useState('');
+
   useEffect(() => {
     const updateCountdown = () => {
       const now = new Date();

@@ -17,7 +17,6 @@ function checkGuess(guess: string): CheckGuessResult {
     return {
       correct: false,
       wordExists: false,
-      solution,
     };
   }
   const feedback: GuessFeedback[] = Array(solution.length).fill(FEEDBACK.GREY);
@@ -43,7 +42,6 @@ function checkGuess(guess: string): CheckGuessResult {
     feedback,
     correct,
     wordExists: true,
-    solution,
   };
 }
 

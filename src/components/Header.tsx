@@ -4,6 +4,7 @@ import FlagDK from '../icons/flag_dk.svg?react';
 import { FaGlobe, FaQuestionCircle, FaCog } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import { MenuButton } from './MenuButton';
+import { storage } from '../services/storage';
 
 export const Header = () => {
   const { t, i18n } = useTranslation();
@@ -63,12 +64,12 @@ export const Header = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
-  // Load state from localStorage
+  // Load config from storage on mount
   useEffect(() => {
     try {
-      const config = JSON.parse(localStorage.getItem('ordle-config') || '{}');
-      setHardMode(!!config.hardMode);
-      setDarkMode(!!config.darkMode);
+      const config = storage.getConfig();
+      setHardMode(config.hardMode);
+      setDarkMode(config.darkMode);
     } catch {
       setHardMode(false);
       setDarkMode(false);
@@ -76,13 +77,10 @@ export const Header = () => {
     setLoaded(true);
   }, []);
 
-  // Automatically sync state and localStorage, but only after initial load
+  // Automatically sync state and storage, but only after initial load
   useEffect(() => {
     if (loaded) {
-      localStorage.setItem(
-        'ordle-config',
-        JSON.stringify({ hardMode, darkMode })
-      );
+      storage.setConfig({ hardMode, darkMode });
     }
   }, [hardMode, darkMode, loaded]);
 
@@ -92,8 +90,7 @@ export const Header = () => {
   };
 
   const handleSwitch = (key: 'hardMode' | 'darkMode', value: boolean) => {
-    const config =
-      JSON.parse(localStorage.getItem('ordle-config') || '{}') || {};
+    const config = storage.getConfig();
     config[key] = value;
     if (key === 'hardMode') setHardMode(value);
     if (key === 'darkMode') setDarkMode(value);

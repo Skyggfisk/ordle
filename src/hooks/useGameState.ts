@@ -3,23 +3,16 @@ import { wordService } from '../services/wordService';
 import {
   type CheckGuessResult,
   type GameResult,
-  type GuessFeedback,
+  type GameState,
   GAME_RESULT,
 } from '../types/game';
+import { storage } from '../services/storage';
 
 const GAME_ACTION = {
   ADD_LETTER: 'ADD_LETTER',
   REMOVE_LETTER: 'REMOVE_LETTER',
   SUBMIT_GUESS: 'SUBMIT_GUESS',
 } as const;
-
-type GameState = {
-  guesses: string[][];
-  currentRow: number;
-  feedbackRows: GuessFeedback[][];
-  revealedRows: boolean[][];
-  gameResult: GameResult;
-};
 
 type GameAction =
   | { type: typeof GAME_ACTION.ADD_LETTER; letter: string }
@@ -31,13 +24,11 @@ type GameAction =
 
 export const WORD_LENGTH = 5;
 const NUM_ATTEMPTS = 6;
-const today = new Date().toISOString().slice(0, 10);
-const gameKey = `ordle-game-${today}`;
 
 function getInitialState(): GameState {
-  const existingGame = localStorage.getItem(gameKey);
+  const existingGame = storage.getCurrentGameState();
   if (existingGame) {
-    return JSON.parse(existingGame);
+    return existingGame;
   }
   const state = {
     guesses: Array(NUM_ATTEMPTS)
@@ -51,9 +42,8 @@ function getInitialState(): GameState {
       .fill(null)
       .map(() => Array(WORD_LENGTH).fill(false)),
     gameResult: GAME_RESULT.UNSETTLED,
-    solution: null,
   };
-  localStorage.setItem(gameKey, JSON.stringify(state));
+  storage.setCurrentGameState(state);
   return state;
 }
 
@@ -109,9 +99,9 @@ function gameReducer(state: GameState, action: GameAction): GameState {
 export const useGameState = () => {
   const [state, dispatch] = useReducer(gameReducer, undefined, getInitialState);
 
-  // Save game state to localStorage
+  // Save game state
   useEffect(() => {
-    localStorage.setItem(gameKey, JSON.stringify(state));
+    storage.setCurrentGameState(state);
   }, [state]);
 
   const addLetter = (letter: string) => {

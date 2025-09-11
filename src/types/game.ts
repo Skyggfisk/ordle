@@ -23,5 +23,12 @@ export type CheckGuessResult = {
   feedback?: GuessFeedback[];
   correct: boolean;
   wordExists: boolean;
-  solution: string | undefined;
+};
+
+export type GameState = {
+  guesses: string[][];
+  currentRow: number;
+  feedbackRows: GuessFeedback[][];
+  revealedRows: boolean[][];
+  gameResult: GameResult;
 };
