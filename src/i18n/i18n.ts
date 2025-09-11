@@ -16,6 +16,9 @@ i18n
     supportedLngs: ['en', 'da'],
     fallbackLng: 'en',
     interpolation: { escapeValue: false },
+    detection: {
+      lookupLocalStorage: 'ordle-i18nextLng',
+    },
   });
 
 export default i18n;

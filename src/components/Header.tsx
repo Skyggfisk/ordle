@@ -66,7 +66,7 @@ export const Header = () => {
   // Load state from localStorage
   useEffect(() => {
     try {
-      const config = JSON.parse(localStorage.getItem('config') || '{}');
+      const config = JSON.parse(localStorage.getItem('ordle-config') || '{}');
       setHardMode(!!config.hardMode);
       setDarkMode(!!config.darkMode);
     } catch {
@@ -79,7 +79,10 @@ export const Header = () => {
   // Automatically sync state and localStorage, but only after initial load
   useEffect(() => {
     if (loaded) {
-      localStorage.setItem('config', JSON.stringify({ hardMode, darkMode }));
+      localStorage.setItem(
+        'ordle-config',
+        JSON.stringify({ hardMode, darkMode })
+      );
     }
   }, [hardMode, darkMode, loaded]);
 
@@ -89,7 +92,8 @@ export const Header = () => {
   };
 
   const handleSwitch = (key: 'hardMode' | 'darkMode', value: boolean) => {
-    const config = JSON.parse(localStorage.getItem('config') || '{}') || {};
+    const config =
+      JSON.parse(localStorage.getItem('ordle-config') || '{}') || {};
     config[key] = value;
     if (key === 'hardMode') setHardMode(value);
     if (key === 'darkMode') setDarkMode(value);

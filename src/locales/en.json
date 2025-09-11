@@ -31,7 +31,7 @@
   },
   "FrontPage": {
     "title": "Welcome to Ordle",
-    "description": "Guess the Danish word in six tries or less! Rotates daily with an new word.",
+    "description": "Guess the Danish word in six tries or less! Rotates daily with a new word.",
     "wordCard": {
       "title": "Ordle",
       "wordClass": "noun",
@@ -59,9 +59,11 @@
       "victory": "Well Done!"
     },
     "totalGuesses": {
-      "lessThan3": "Impressive! You used just <1>{{count}}</1> guesses, and today's solution is:",
-      "between3and5": "Good job! You used <1>{{count}}</1> guesses, and today's solution is:",
-      "moreThan5": "Better luck next time. You used all <1>{{count}}</1> guesses, and today's solution is:"
+      "holeInOne": "Wow! You used just <1>{{count}}</1> guess for today's solution",
+      "lessThan3": "Impressive! You used just <1>{{count}}</1> guesses, and today's solution is",
+      "between3and5": "Good job! You used <1>{{count}}</1> guesses, and today's solution is",
+      "moreThan5": "Close one! You used all <1>{{count}}</1> guesses, and today's solution is",
+      "defeat": "Better luck next time! You used all <1>{{count}}</1> guesses. Today's solution is"
     },
     "endComment": "Thank you for playing! Check back in <1>[{{countdown}}]</1> for the next word!"
   }

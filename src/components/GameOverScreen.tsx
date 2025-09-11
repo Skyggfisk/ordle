@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { wordService } from '../services/wordService';
+import { GAME_RESULT, type GameResult } from '../types/game';
 
 export const GameOverScreen = () => {
   const { t } = useTranslation();
@@ -12,8 +13,8 @@ export const GameOverScreen = () => {
   );
   const wotd = wordService.getWotd();
 
-  const result = gameData.gameResult || 'Game Over';
-  const totalGuesses = gameData.currentRow + 1;
+  const result: GameResult = gameData.gameResult || GAME_RESULT.UNSETTLED;
+  const totalGuesses = gameData.currentRow;
 
   const [countdown, setCountdown] = useState('');
   useEffect(() => {
@@ -34,10 +35,20 @@ export const GameOverScreen = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const getI18nGuessMessageKey = () => {
+    if (result === GAME_RESULT.DEFEAT)
+      return 'GameOverScreen.totalGuesses.defeat';
+    if (totalGuesses === 1) return 'GameOverScreen.totalGuesses.holeInOne';
+    if (totalGuesses < 3) return 'GameOverScreen.totalGuesses.lessThan3';
+    if (totalGuesses <= 5) return 'GameOverScreen.totalGuesses.between3and5';
+    if (totalGuesses > 5) return 'GameOverScreen.totalGuesses.moreThan5';
+    return 'GameOverScreen.totalGuesses.defeat';
+  };
+
   return (
     <div className="flex h-full flex-col items-center justify-center p-8">
       <h2 className="mb-8 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-3xl font-bold text-transparent">
-        {result === 'Game Over!'
+        {result === GAME_RESULT.DEFEAT
           ? t('GameOverScreen.title.defeat')
           : t('GameOverScreen.title.victory')}
       </h2>
@@ -45,13 +56,7 @@ export const GameOverScreen = () => {
       <div className="mb-8 text-xl">
         <span>
           <Trans
-            i18nKey={
-              totalGuesses < 3
-                ? 'GameOverScreen.totalGuesses.lessThan3'
-                : totalGuesses <= 5
-                  ? 'GameOverScreen.totalGuesses.between3and5'
-                  : 'GameOverScreen.totalGuesses.moreThan5'
-            }
+            i18nKey={getI18nGuessMessageKey()}
             values={{ count: totalGuesses }}
             components={{
               1: (
@@ -64,6 +69,7 @@ export const GameOverScreen = () => {
             <span className="font-mono text-purple-300">{totalGuesses}</span>
           </Trans>
         </span>
+        :
         <a
           href={`https://ordnet.dk/ddo/ordbog?query=${wotd || 'N/A'}`}
           target="_blank"
