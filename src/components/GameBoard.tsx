@@ -11,6 +11,7 @@ import {
   type GuessFeedback,
 } from '../types/game';
 import { NOTIFICATION } from '../types/notification';
+import { CONTROL_KEYS } from '../types/keyboard';
 
 interface GameBoardProps {
   onGameOver: () => void;
@@ -29,9 +30,9 @@ export const GameBoard = ({ onGameOver }: GameBoardProps) => {
     if (state.gameResult !== GAME_RESULT.UNSETTLED) return; // Don't listen if game is over
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Backspace') {
+      if (e.key === CONTROL_KEYS.BACKSPACE) {
         removeLetter();
-      } else if (e.key === 'Enter') {
+      } else if (e.key === CONTROL_KEYS.ENTER) {
         const submitGuessResult = submitGuess(
           state.guesses[state.currentRow] ?? [],
           (gameResult) => {
