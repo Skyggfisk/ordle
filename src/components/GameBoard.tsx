@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Keyboard } from './Keyboard';
-import { getKeyboardFeedback } from './Keyboard.utils';
+import { Keyboard } from './keyboard/Keyboard';
+import { getKeyboardFeedback } from './keyboard/Keyboard.utils';
 import { useNotification } from '../hooks/useNotification';
 import { BoardRow } from './BoardRow';
 import { useGameState, WORD_LENGTH } from '../hooks/useGameState';

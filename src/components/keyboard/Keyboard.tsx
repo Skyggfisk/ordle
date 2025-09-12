@@ -1,5 +1,8 @@
-import { FEEDBACK, type GuessFeedback } from '../types/game';
-import { CONTROL_KEYS } from '../types/keyboard';
+import { FEEDBACK, type GuessFeedback } from '../../types/game';
+import { CONTROL_KEYS } from '../../types/keyboard';
+import { BackspaceKey } from './BackspaceKey';
+import { EnterKey } from './EnterKey';
+import { LetterKey } from './LetterKey';
 
 const KEYS = [
   ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'Å'],
@@ -27,36 +30,25 @@ export const Keyboard = ({ keyFeedback = {} }: KeyboardProps) => {
   return (
     <div className="m-8 mx-auto flex w-full max-w-xl flex-col items-center gap-2 rounded bg-white/10 p-2 select-none sm:p-4">
       {KEYS.map((row, rowIdx) => {
+        // Add backspace and enter keys to the last row
         if (rowIdx === KEYS.length - 1) {
           return (
             <div
               key={rowIdx}
               className="flex w-full flex-wrap justify-center gap-1 sm:gap-2"
             >
-              <button
-                className="max-w-[4rem] min-w-[2.5rem] flex-1 cursor-pointer rounded bg-purple-300 px-2 py-2 text-base font-bold text-black shadow transition-colors duration-150 hover:bg-purple-400 sm:px-4 sm:py-2"
+              <BackspaceKey
                 onClick={() => triggerKeydown(CONTROL_KEYS.BACKSPACE)}
-                type="button"
-              >
-                ⌫
-              </button>
+              />
               {row.map((key) => (
-                <button
+                <LetterKey
                   key={key}
-                  className={`max-w-[2.8rem] min-w-[2.2rem] flex-1 rounded px-2 py-2 text-base font-bold shadow transition-colors duration-150 hover:bg-white/40 sm:min-w-[2.5rem] sm:px-4 sm:py-2 sm:text-lg ${getBg(key)} cursor-pointer`}
+                  letter={key}
                   onClick={() => triggerKeydown(key)}
-                  type="button"
-                >
-                  {key}
-                </button>
+                  bg={getBg(key)}
+                />
               ))}
-              <button
-                className="max-w-fit min-w-[2.5rem] flex-1 cursor-pointer rounded bg-green-300 px-2 py-2 text-base font-bold text-black shadow transition-colors duration-150 hover:bg-green-400 sm:px-4 sm:py-2"
-                onClick={() => triggerKeydown(CONTROL_KEYS.ENTER)}
-                type="button"
-              >
-                Enter
-              </button>
+              <EnterKey onClick={() => triggerKeydown(CONTROL_KEYS.ENTER)} />
             </div>
           );
         }
@@ -67,14 +59,12 @@ export const Keyboard = ({ keyFeedback = {} }: KeyboardProps) => {
             className="flex w-full flex-wrap justify-center gap-1 sm:gap-2"
           >
             {row.map((key) => (
-              <button
+              <LetterKey
                 key={key}
-                className={`max-w-[2.8rem] min-w-[2.2rem] flex-1 rounded px-2 py-2 text-base font-bold shadow transition-colors duration-150 hover:bg-white/40 sm:min-w-[2.5rem] sm:px-4 sm:py-2 sm:text-lg ${getBg(key)} cursor-pointer`}
+                letter={key}
                 onClick={() => triggerKeydown(key)}
-                type="button"
-              >
-                {key}
-              </button>
+                bg={getBg(key)}
+              />
             ))}
           </div>
         );
