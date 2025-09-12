@@ -1,15 +1,17 @@
 # Ordle
 
-Ordle is a Danish word-guessing game inspired by Wordle, built as a web app. It currently features more than 3000 Danish lemmas, supports internationalization for Danish and English, and a flexible architecture for word sources.
+Ordle is a Danish word-guessing game inspired by Wordle, built as a web app. It currently features more than 3400 Danish [lemmas](<https://en.wikipedia.org/wiki/Lemma_(morphology)>), supports internationalization for Danish and English, and a flexible architecture for word sources.
+
+It is hosted on GitHub pages at [skyggfisk.github.io/ordle/](https://skyggfisk.github.io/ordle/).
 
 ## Getting Started
 
-You can run Ordle either fully locally or inside a Dev Container (recommended).
+You can run Ordle either locally or inside a Dev Container (recommended). The project uses [Bun](https://bun.sh/) as both package manager and JavaScript runtime.
 
 ### Prerequisites
 
 - **Local development:** [Bun](https://bun.sh/) must be installed. Follow the instructions on the Bun website to install it for your platform.
-- **Dev container:** Bun is already preinstalled; no action needed.
+- **Dev container:** Uses the [official bun Docker image](https://bun.sh/docs/installation#docker); no action needed.
 
 ### 1. Clone the repository
 
@@ -38,14 +40,16 @@ Vite should display a message with where the app is available, the default addre
 
 ## Word Extraction Script
 
-To update the word list, use the extraction script with a TSV file from [Det Centrale Ordregister (COR)](https://ordregister.dk):
+To update the word list, use the extraction script with a [TSV](https://en.wikipedia.org/wiki/Tab-separated_values) file from [Det Centrale Ordregister (COR)](https://ordregister.dk):
 
 ```bash
 # Place your COR TSV file in scripts/
 bun run generate:words
 ```
 
-- The script expects a TSV file from COR. If you need to extract words from another format or registry, you’ll need to adapt or build a new script.
+- The script expects a TSV file from COR. If you want to extract words from another format or registry, you’ll need to build a new script for that purpose.
+- The current script can be adapted to extract more or less words if desired, by adding or removing [COR codes](https://ordregister.dk/doc/COR.html).
+- Take a look at the script [extractWords](scripts/extractWords.ts).
 
 ---
 
@@ -88,6 +92,6 @@ Testing setup and instructions will be added soon.
 ## Additional Information
 
 - **Contributing:**  
-  Contributions are welcome! Please open issues or contact me on GitHub.
+  Contributions and suggestions are welcome! Please open issues or pull requests.
 - **License:**  
   [MIT](LICENSE)
