@@ -22,6 +22,8 @@ type GameAction =
       checkGuessResult: CheckGuessResult;
     };
 
+type AddLetterResult = { success: boolean; insertCol: number };
+
 export const WORD_LENGTH = 5;
 const NUM_ATTEMPTS = 6;
 
@@ -104,12 +106,19 @@ export const useGameState = () => {
     storage.setCurrentGameState(state);
   }, [state]);
 
-  const addLetter = (letter: string) => {
+  const addLetter = (letter: string): AddLetterResult => {
+    // Check if row is already full
+    const nextIdx = state.guesses[state.currentRow].findIndex((c) => c === '');
+    if (nextIdx === -1) return { success: false, insertCol: nextIdx };
+
     // Only allow valid letters (A-Z, ÆØÅ)
     const upperLetter = letter.toUpperCase();
-    if (!/^[A-ZÆØÅ]$/.test(upperLetter)) return false;
+    if (!/^[A-ZÆØÅ]$/.test(upperLetter))
+      return { success: false, insertCol: nextIdx };
+
+    // Add letter to current row
     dispatch({ type: GAME_ACTION.ADD_LETTER, letter: upperLetter });
-    return true;
+    return { success: true, insertCol: nextIdx };
   };
 
   const removeLetter = () => {

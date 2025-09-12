@@ -13,27 +13,26 @@ import {
 import { NOTIFICATION } from '../types/notification';
 
 interface GameBoardProps {
-  onGameOver?: () => void;
+  onGameOver: () => void;
 }
 
 export const GameBoard = ({ onGameOver }: GameBoardProps) => {
   const { t } = useTranslation();
-
   const { state, addLetter, removeLetter, submitGuess } = useGameState();
-
   const notify = useNotification();
+
   const [shakeRow, setShakeRow] = useState(false);
   const [bounceTile, setBounceTile] = useState<BounceTile>(null);
 
   // Global key handler
   useEffect(() => {
-    if (state.gameResult) return; // Don't listen if game is over
+    if (state.gameResult !== GAME_RESULT.UNSETTLED) return; // Don't listen if game is over
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Backspace') {
         removeLetter();
       } else if (e.key === 'Enter') {
-        const result = submitGuess(
+        const submitGuessResult = submitGuess(
           state.guesses[state.currentRow] ?? [],
           (gameResult) => {
             if (gameResult === GAME_RESULT.VICTORY) {
@@ -47,7 +46,7 @@ export const GameBoard = ({ onGameOver }: GameBoardProps) => {
             }
           }
         );
-        if (result === false) {
+        if (submitGuessResult === false) {
           notify(t('GameBoard.invalidWord.notFound'), {
             type: NOTIFICATION.ERROR,
           });
@@ -56,15 +55,13 @@ export const GameBoard = ({ onGameOver }: GameBoardProps) => {
           return;
         }
       } else {
-        const nextIdx = state.guesses[state.currentRow]?.findIndex(
-          (c) => c === ''
-        );
-        if (nextIdx !== undefined && nextIdx !== -1) {
-          const addLetterSuccess = addLetter(e.key);
-          if (addLetterSuccess) {
-            setBounceTile({ row: state.currentRow, col: nextIdx });
-            setTimeout(() => setBounceTile(null), 300);
-          }
+        const addLetterResult = addLetter(e.key);
+        if (addLetterResult.success) {
+          setBounceTile({
+            row: state.currentRow,
+            col: addLetterResult.insertCol,
+          });
+          setTimeout(() => setBounceTile(null), 300);
         }
       }
     };
@@ -84,7 +81,10 @@ export const GameBoard = ({ onGameOver }: GameBoardProps) => {
 
   // Notify when game is over, after delay
   useEffect(() => {
-    if (state.gameResult && onGameOver) {
+    if (
+      state.gameResult === GAME_RESULT.VICTORY ||
+      state.gameResult === GAME_RESULT.DEFEAT
+    ) {
       const timer = setTimeout(() => {
         onGameOver();
       }, 2000);
@@ -94,7 +94,7 @@ export const GameBoard = ({ onGameOver }: GameBoardProps) => {
 
   // Get feedback for a specific row
   const getRowFeedback = (rowIdx: number): GuessFeedback[] => {
-    if (rowIdx < state.currentRow || !!state.gameResult) {
+    if (rowIdx < state.currentRow) {
       return state.feedbackRows[rowIdx] ?? Array(WORD_LENGTH).fill(null);
     }
     return Array(WORD_LENGTH).fill(null);
