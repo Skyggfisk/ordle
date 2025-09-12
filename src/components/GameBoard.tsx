@@ -4,9 +4,10 @@ import { Keyboard } from './keyboard/Keyboard';
 import { getKeyboardFeedback } from './keyboard/Keyboard.utils';
 import { useNotification } from '../hooks/useNotification';
 import { BoardRow } from './BoardRow';
-import { useGameState, WORD_LENGTH } from '../hooks/useGameState';
+import { useGameState } from '../hooks/useGameState';
 import {
   GAME_RESULT,
+  MAX_WORD_LENGTH,
   type BounceTile,
   type GuessFeedback,
 } from '../types/game';
@@ -38,7 +39,7 @@ export const GameBoard = ({ onGameOver }: GameBoardProps) => {
           (gameResult) => {
             if (gameResult === GAME_RESULT.VICTORY) {
               notify(t('GameBoard.result.victory'), {
-                type: NOTIFICATION.INFO,
+                type: NOTIFICATION.SUCCESS,
               });
             } else if (gameResult === GAME_RESULT.DEFEAT) {
               notify(t('GameBoard.result.defeat'), {
@@ -49,7 +50,7 @@ export const GameBoard = ({ onGameOver }: GameBoardProps) => {
         );
         if (submitGuessResult === false) {
           notify(t('GameBoard.invalidWord.notFound'), {
-            type: NOTIFICATION.ERROR,
+            type: NOTIFICATION.INFO,
           });
           setShakeRow(true);
           setTimeout(() => setShakeRow(false), 600);
@@ -96,9 +97,9 @@ export const GameBoard = ({ onGameOver }: GameBoardProps) => {
   // Get feedback for a specific row
   const getRowFeedback = (rowIdx: number): GuessFeedback[] => {
     if (rowIdx < state.currentRow) {
-      return state.feedbackRows[rowIdx] ?? Array(WORD_LENGTH).fill(null);
+      return state.feedbackRows[rowIdx] ?? Array(MAX_WORD_LENGTH).fill(null);
     }
-    return Array(WORD_LENGTH).fill(null);
+    return Array(MAX_WORD_LENGTH).fill(null);
   };
 
   return (

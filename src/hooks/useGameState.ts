@@ -5,6 +5,8 @@ import {
   type GameResult,
   type GameState,
   GAME_RESULT,
+  MAX_ATTEMPT_LIMIT,
+  MAX_WORD_LENGTH,
 } from '../types/game';
 import { storage } from '../services/storage';
 
@@ -24,25 +26,22 @@ type GameAction =
 
 type AddLetterResult = { success: boolean; insertCol: number };
 
-export const WORD_LENGTH = 5;
-const NUM_ATTEMPTS = 6;
-
 function getInitialState(): GameState {
   const existingGame = storage.getCurrentGameState();
   if (existingGame) {
     return existingGame;
   }
   const state = {
-    guesses: Array(NUM_ATTEMPTS)
+    guesses: Array(MAX_ATTEMPT_LIMIT)
       .fill(null)
-      .map(() => Array(WORD_LENGTH).fill('')),
+      .map(() => Array(MAX_WORD_LENGTH).fill('')),
     currentRow: 0,
-    feedbackRows: Array(NUM_ATTEMPTS)
+    feedbackRows: Array(MAX_ATTEMPT_LIMIT)
       .fill(null)
-      .map(() => Array(WORD_LENGTH).fill(null)),
-    revealedRows: Array(NUM_ATTEMPTS)
+      .map(() => Array(MAX_WORD_LENGTH).fill(null)),
+    revealedRows: Array(MAX_ATTEMPT_LIMIT)
       .fill(null)
-      .map(() => Array(WORD_LENGTH).fill(false)),
+      .map(() => Array(MAX_WORD_LENGTH).fill(false)),
     gameResult: GAME_RESULT.UNSETTLED,
   };
   storage.setCurrentGameState(state);
@@ -87,7 +86,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         ),
         gameResult: action.checkGuessResult.correct
           ? GAME_RESULT.VICTORY
-          : state.currentRow === NUM_ATTEMPTS - 1
+          : state.currentRow === MAX_ATTEMPT_LIMIT - 1
             ? GAME_RESULT.DEFEAT
             : GAME_RESULT.UNSETTLED,
         guesses: state.guesses,
@@ -136,7 +135,7 @@ export const useGameState = () => {
       dispatch({ type: GAME_ACTION.SUBMIT_GUESS, checkGuessResult });
       if (checkGuessResult.correct) {
         if (onResult) onResult(GAME_RESULT.VICTORY);
-      } else if (state.currentRow === NUM_ATTEMPTS - 1) {
+      } else if (state.currentRow === MAX_ATTEMPT_LIMIT - 1) {
         if (onResult) onResult(GAME_RESULT.DEFEAT);
       }
     }
