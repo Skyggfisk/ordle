@@ -28,7 +28,10 @@ export const Keyboard = ({ keyFeedback = {} }: KeyboardProps) => {
   }
 
   return (
-    <div className="m-8 mx-auto flex w-full max-w-xl flex-col items-center gap-2 rounded bg-white/10 p-2 select-none sm:p-4">
+    <div
+      data-testid="keyboard"
+      className="m-8 mx-auto flex w-full max-w-xl flex-col items-center gap-2 rounded bg-white/10 p-2 select-none sm:p-4"
+    >
       {KEYS.map((row, rowIdx) => {
         // Add backspace and enter keys to the last row
         if (rowIdx === KEYS.length - 1) {
