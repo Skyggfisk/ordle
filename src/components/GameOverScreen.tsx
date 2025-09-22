@@ -42,7 +42,8 @@ export const GameOverScreen = () => {
 
   return (
     <div className="flex h-full flex-col items-center justify-center p-8">
-      <h2 className="mb-8 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-3xl font-bold text-transparent">
+      {/* <h2 className="mb-8 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-3xl font-bold text-transparent"> */}
+      <h2 className="mb-8 text-3xl font-bold">
         {result === GAME_RESULT.DEFEAT
           ? t('GameOverScreen.title.defeat')
           : t('GameOverScreen.title.victory')}
@@ -55,20 +56,18 @@ export const GameOverScreen = () => {
             values={{ count: totalGuesses }}
             components={{
               1: (
-                <span className="font-mono text-purple-300">
+                <span className="font-mono text-purple-500 dark:text-purple-300">
                   {totalGuesses}
                 </span>
               ),
             }}
-          >
-            <span className="font-mono text-purple-300">{totalGuesses}</span>
-          </Trans>
+          />
         </span>
         :
         <a
           href={`https://ordnet.dk/ddo/ordbog?query=${wotd || 'N/A'}`}
           target="_blank"
-          className="ml-1 font-semibold text-blue-200 underline underline-offset-2 transition-colors duration-200 hover:text-purple-300"
+          className="ml-1 font-semibold text-blue-500 underline underline-offset-2 transition-colors duration-200 hover:text-purple-600 dark:text-blue-200 dark:hover:text-purple-300"
         >
           {wotd || 'N/A'}
         </a>
@@ -78,11 +77,11 @@ export const GameOverScreen = () => {
           i18nKey="GameOverScreen.endComment"
           values={{ countdown }}
           components={{
-            1: <span className="font-mono text-blue-300"></span>,
+            1: (
+              <span className="font-mono text-emerald-500 dark:text-emerald-300"></span>
+            ),
           }}
-        >
-          <span className="font-mono text-blue-300"></span>
-        </Trans>
+        />
       </div>
     </div>
   );

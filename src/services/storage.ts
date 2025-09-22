@@ -1,9 +1,17 @@
 import type { GameState } from '../types/game';
 
-interface OrdleConfig {
+export const THEME = {
+  LIGHT: 'light',
+  DARK: 'dark',
+  SYSTEM: 'system',
+} as const;
+
+export type OrdleTheme = (typeof THEME)[keyof typeof THEME];
+
+export type OrdleConfig = {
   hardMode: boolean;
-  darkMode: boolean;
-}
+  theme: OrdleTheme;
+};
 
 const CONFIG_KEY = 'ordle-config';
 const GAME_KEY_PREFIX = 'ordle-game-';

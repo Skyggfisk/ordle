@@ -20,7 +20,7 @@ export const BoardRow = ({
   shake,
 }: BoardRowProps) => {
   return (
-    <div className={`flex justify-center gap-2 ${shake ? 'shake' : ''}`}>
+    <div className={`flex justify-center gap-1 ${shake ? 'shake' : ''}`}>
       {tiles.map((char, letterIdx) => (
         <LetterTile
           key={letterIdx}

@@ -12,7 +12,12 @@
     "settings": {
       "label": "Indstillinger",
       "hardMode": "Svært niveau",
-      "darkMode": "Mørk tilstand"
+      "themeMode": {
+        "label": "Tema",
+        "light": "Lyst",
+        "dark": "Mørkt",
+        "system": "System"
+      }
     },
     "howToPlay": {
       "label": "Spilguide",

@@ -19,13 +19,13 @@ export const Game = () => {
     <>
       {!showGame && !gameOver && (
         <>
-          <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
-            <span className="gradient-bg bg-clip-text text-transparent">
-              {t('FrontPage.title')}
-            </span>
+          <h1 className="text-5xl font-extrabold text-black sm:text-[5rem] dark:text-white">
+            {t('FrontPage.title')}
           </h1>
 
-          <p className="text-2xl text-white">{t('FrontPage.description')}</p>
+          <p className="text-2xl text-gray-500 dark:text-neutral-400">
+            {t('FrontPage.description')}
+          </p>
 
           <WordCard />
 

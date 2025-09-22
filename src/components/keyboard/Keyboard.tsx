@@ -16,10 +16,13 @@ export interface KeyboardProps {
 
 export const Keyboard = ({ keyFeedback = {} }: KeyboardProps) => {
   const getBg = (key: string) => {
-    if (keyFeedback[key] === FEEDBACK.GREEN) return 'bg-green-600 text-white';
-    if (keyFeedback[key] === FEEDBACK.YELLOW) return 'bg-yellow-400 text-white';
-    if (keyFeedback[key] === FEEDBACK.GREY) return 'bg-gray-600 text-white';
-    return 'bg-white/20 text-black';
+    if (keyFeedback[key] === FEEDBACK.GREEN)
+      return 'bg-green-600 text-white hover:bg-green-600/40 dark:hover:bg-green-600/80';
+    if (keyFeedback[key] === FEEDBACK.YELLOW)
+      return 'bg-yellow-400 text-white hover:bg-yellow-400/40 dark:hover:bg-yellow-400/80';
+    if (keyFeedback[key] === FEEDBACK.GREY)
+      return 'bg-gray-600 text-white hover:bg-gray-600/40 dark:hover:bg-gray-600/80';
+    return 'text-black hover:bg-neutral-200 dark:hover:bg-white/40 dark:bg-white/20';
   };
 
   function triggerKeydown(key: string) {
@@ -30,7 +33,7 @@ export const Keyboard = ({ keyFeedback = {} }: KeyboardProps) => {
   return (
     <div
       data-testid="keyboard"
-      className="m-8 mx-auto flex w-full max-w-xl flex-col items-center gap-2 rounded bg-white/10 p-2 select-none sm:p-4"
+      className="flex w-full max-w-lg flex-col items-center gap-1 rounded bg-neutral-200/40 p-2 select-none dark:bg-white/10"
     >
       {KEYS.map((row, rowIdx) => {
         // Add backspace and enter keys to the last row
@@ -38,7 +41,7 @@ export const Keyboard = ({ keyFeedback = {} }: KeyboardProps) => {
           return (
             <div
               key={rowIdx}
-              className="flex w-full flex-wrap justify-center gap-1 sm:gap-2"
+              className="flex w-full flex-wrap justify-center gap-1"
             >
               <BackspaceKey
                 onClick={() => triggerKeydown(CONTROL_KEYS.BACKSPACE)}
@@ -59,7 +62,7 @@ export const Keyboard = ({ keyFeedback = {} }: KeyboardProps) => {
         return (
           <div
             key={rowIdx}
-            className="flex w-full flex-wrap justify-center gap-1 sm:gap-2"
+            className="flex w-full flex-wrap justify-center gap-1"
           >
             {row.map((key) => (
               <LetterKey

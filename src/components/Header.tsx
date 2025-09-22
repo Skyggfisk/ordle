@@ -4,7 +4,21 @@ import FlagDK from '../icons/flag_dk.svg?react';
 import { FaGlobe, FaQuestionCircle, FaCog } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import { MenuButton } from './MenuButton';
-import { storage } from '../services/storage';
+import { storage, THEME, type OrdleTheme } from '../services/storage';
+
+// Helper to apply system theme
+const getSystemTheme = () => {
+  return window.matchMedia('(prefers-color-scheme: dark)');
+};
+
+const applySystemTheme = () => {
+  const prefersDark = getSystemTheme().matches;
+  if (prefersDark) {
+    document.documentElement.classList.add(THEME.DARK);
+  } else {
+    document.documentElement.classList.remove(THEME.DARK);
+  }
+};
 
 export const Header = () => {
   const { t, i18n } = useTranslation();
@@ -61,7 +75,12 @@ export const Header = () => {
 
   // Init state
   const [hardMode, setHardMode] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
+  // Determine initial theme: use config if present, else use 'system'
+  const getInitialTheme = () => {
+    const config = storage.getConfig();
+    return config.theme || THEME.SYSTEM;
+  };
+  const [theme, setTheme] = useState<OrdleTheme>(getInitialTheme());
   const [loaded, setLoaded] = useState(false);
 
   // Load config from storage on mount
@@ -69,31 +88,73 @@ export const Header = () => {
     try {
       const config = storage.getConfig();
       setHardMode(!!config.hardMode);
-      setDarkMode(!!config.darkMode);
+      // If no theme in config, set to 'system'
+      if (!config.theme) {
+        storage.setConfig({ ...config, theme: THEME.SYSTEM });
+        setTheme(THEME.SYSTEM);
+      } else {
+        setTheme(config.theme);
+      }
     } catch {
       setHardMode(false);
-      setDarkMode(false);
+      setTheme(THEME.SYSTEM);
+      storage.setConfig({ hardMode: false, theme: THEME.SYSTEM });
     }
     setLoaded(true);
   }, []);
 
   // Automatically sync config state and storage, but only after initial load
   useEffect(() => {
-    if (loaded) {
-      storage.setConfig({ hardMode, darkMode });
+    if (!loaded) return;
+    storage.setConfig({ ...storage.getConfig(), hardMode, theme });
+    // Apply theme to document root
+    if (theme === THEME.DARK) {
+      document.documentElement.classList.add(THEME.DARK);
+    } else if (theme === THEME.LIGHT) {
+      document.documentElement.classList.remove(THEME.DARK);
+    } else {
+      // System: follow OS preference
+      const prefersDark = getSystemTheme().matches;
+      if (prefersDark) {
+        document.documentElement.classList.add(THEME.DARK);
+      } else {
+        document.documentElement.classList.remove(THEME.DARK);
+      }
     }
-  }, [hardMode, darkMode, loaded]);
+  }, [hardMode, theme, loaded]);
 
   const handleLangChange = (newLang: string) => {
     i18n.changeLanguage(newLang);
     setShowLangSelect(false);
   };
 
-  const handleSwitch = (key: 'hardMode' | 'darkMode', value: boolean) => {
+  const handleSwitch = (key: 'hardMode', value: boolean) => {
     const config = storage.getConfig();
     config[key] = value;
     if (key === 'hardMode') setHardMode(value);
-    if (key === 'darkMode') setDarkMode(value);
+  };
+
+  // Listen for system theme changes when in system mode
+  useEffect(() => {
+    if (theme !== THEME.SYSTEM) return;
+    applySystemTheme();
+    const media = getSystemTheme();
+    media.addEventListener('change', applySystemTheme);
+    return () => {
+      media.removeEventListener('change', applySystemTheme);
+    };
+  }, [theme]);
+
+  const handleThemeChange = (mode: OrdleTheme) => {
+    setTheme(mode);
+    storage.setConfig({ ...storage.getConfig(), theme: mode });
+    if (mode === THEME.DARK) {
+      document.documentElement.classList.add(THEME.DARK);
+    } else if (mode === THEME.LIGHT) {
+      document.documentElement.classList.remove(THEME.DARK);
+    } else {
+      applySystemTheme();
+    }
   };
 
   return (
@@ -143,7 +204,7 @@ export const Header = () => {
         <ul className="space-y-1">
           <li>
             <button
-              className={`w-full rounded px-2 py-1 text-left ${i18n.language === 'en' ? 'bg-purple-100 font-bold' : ''} flex items-center gap-1 hover:bg-purple-200`}
+              className={`w-full cursor-pointer rounded px-2 py-1 text-left ${i18n.language === 'en' ? 'bg-gray-100 font-bold dark:bg-neutral-500' : ''} flex items-center gap-1 hover:bg-gray-300 dark:hover:bg-neutral-700`}
               onClick={() => handleLangChange('en')}
             >
               <FlagGB className="mr-1 inline-block h-5 w-5 align-text-bottom" />
@@ -152,7 +213,7 @@ export const Header = () => {
           </li>
           <li>
             <button
-              className={`w-full rounded px-2 py-1 text-left ${i18n.language === 'da' ? 'bg-purple-100 font-bold' : ''} flex items-center gap-1 hover:bg-purple-200`}
+              className={`w-full cursor-pointer rounded px-2 py-1 text-left ${i18n.language === 'da' ? 'bg-gray-100 font-bold dark:bg-neutral-500' : ''} flex items-center gap-1 hover:bg-gray-300 dark:hover:bg-neutral-700`}
               onClick={() => handleLangChange('da')}
             >
               <FlagDK className="mr-1 inline-block h-5 w-5 align-text-bottom" />
@@ -180,32 +241,41 @@ export const Header = () => {
               disabled
             />
             <span
-              className={`ml-2 flex h-5 w-10 items-center rounded-full bg-gray-300 p-1 transition-colors ${hardMode ? 'bg-purple-400' : ''}`}
+              className={`ml-2 flex h-5 w-10 cursor-not-allowed items-center rounded-full bg-gray-300 p-1 transition-colors dark:bg-neutral-700 ${hardMode ? 'bg-blue-400' : ''}`}
             >
               <span
-                className={`h-4 w-4 transform rounded-full bg-white shadow-md transition-transform ${hardMode ? 'translate-x-5' : ''}`}
+                className={`h-4 w-4 transform rounded-full bg-white shadow-md transition-transform dark:bg-neutral-400 ${hardMode ? 'translate-x-5' : ''}`}
               ></span>
             </span>
           </label>
         </div>
-        <div className="flex items-center justify-between gap-2">
-          <span className="text-nowrap">{t('Header.settings.darkMode')}</span>
-          <label className="inline-flex cursor-pointer items-center">
-            <input
-              type="checkbox"
-              checked={darkMode}
-              onChange={(e) => handleSwitch('darkMode', e.target.checked)}
-              className="sr-only"
-              disabled
-            />
-            <span
-              className={`ml-2 flex h-5 w-10 items-center rounded-full bg-gray-300 p-1 transition-colors ${darkMode ? 'bg-purple-400' : ''}`}
-            >
-              <span
-                className={`h-4 w-4 transform rounded-full bg-white shadow-md transition-transform ${darkMode ? 'translate-x-5' : ''}`}
-              ></span>
-            </span>
-          </label>
+        <div className="flex flex-col gap-2">
+          <span className="text-nowrap">
+            {t('Header.settings.themeMode.label')}
+          </span>
+          <div className="flex rounded-lg bg-gray-300 p-1 dark:bg-neutral-700">
+            {Object.values(THEME).map((mode) => (
+              <button
+                key={mode}
+                className={`min-w-[120px] flex-1 rounded-lg px-4 py-2 transition-colors ${
+                  theme === mode
+                    ? 'bg-white font-bold text-black shadow dark:bg-neutral-800 dark:text-white'
+                    : 'bg-transparent text-gray-700 dark:text-neutral-300'
+                } `}
+                onClick={() => handleThemeChange(mode)}
+                aria-pressed={theme === mode}
+              >
+                <span className="inline-block w-full cursor-pointer text-center">
+                  {mode === THEME.LIGHT &&
+                    `☀️ ${t('Header.settings.themeMode.light')}`}
+                  {mode === THEME.DARK &&
+                    `🌙 ${t('Header.settings.themeMode.dark')}`}
+                  {mode === THEME.SYSTEM &&
+                    `🖥️ ${t('Header.settings.themeMode.system')}`}
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
       </MenuButton>
     </div>

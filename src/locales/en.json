@@ -12,7 +12,12 @@
     "settings": {
       "label": "Settings",
       "hardMode": "Hard Mode",
-      "darkMode": "Dark Mode"
+      "themeMode": {
+        "label": "Theme",
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System"
+      }
     },
     "howToPlay": {
       "label": "How to Play",

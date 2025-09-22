@@ -104,8 +104,8 @@ export const GameBoard = ({ onGameOver }: GameBoardProps) => {
 
   return (
     <>
-      <div className="relative mt-8 rounded bg-white/10 p-8 text-white">
-        <div className="flex flex-col gap-4">
+      <div className="relative mt-8 rounded p-8 dark:text-white">
+        <div className="flex flex-col gap-2">
           {state.guesses.map((guess, rowIdx) => {
             const feedback = getRowFeedback(rowIdx);
             return (

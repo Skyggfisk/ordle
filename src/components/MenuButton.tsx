@@ -23,7 +23,7 @@ export const MenuButton = ({
     <div className="relative">
       <button
         ref={buttonRef}
-        className={`flex items-center overflow-hidden rounded-full px-3 py-2 text-white transition-all duration-200 hover:[&>span:last-of-type]:ml-2 hover:[&>span:last-of-type]:max-w-[200px] ${showMenu ? 'bg-white/20' : 'bg-white/10'} hover:bg-white/20 hover:[&>span:last-of-type]:opacity-100`}
+        className={`flex cursor-pointer items-center overflow-hidden rounded-full px-3 py-2 text-black transition-all duration-200 dark:text-white hover:[&>span:last-of-type]:ml-2 hover:[&>span:last-of-type]:max-w-[200px] ${showMenu ? 'bg-gray-300 dark:bg-neutral-700' : 'bg-gray-200 dark:bg-neutral-900'} hover:bg-gray-300 dark:hover:bg-neutral-700 hover:[&>span:last-of-type]:opacity-100`}
         aria-label={label}
         onClick={() => setShowMenu((v) => !v)}
       >
@@ -37,7 +37,7 @@ export const MenuButton = ({
       {showMenu && (
         <div
           ref={menuRef}
-          className="absolute right-[-50%] z-50 mt-2 w-auto rounded bg-white/50 px-4 py-3 text-sm text-black shadow-lg sm:right-0"
+          className="absolute right-[-50%] z-50 mt-2 w-auto rounded bg-gray-200 px-4 py-3 text-sm text-black shadow-lg sm:right-0 dark:bg-neutral-600 dark:text-white"
         >
           {children}
         </div>
