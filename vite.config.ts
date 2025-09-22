@@ -2,19 +2,11 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import svgr from 'vite-plugin-svgr';
-import VitePluginReactRemoveAttributes from 'vite-plugin-react-remove-attributes';
 
 // https://vite.dev/config/
 export default defineConfig(async () => {
   return {
-    plugins: [
-      react(),
-      tailwindcss(),
-      svgr(),
-      VitePluginReactRemoveAttributes({
-        attributes: ['data-testid'],
-      }),
-    ],
+    plugins: [react(), tailwindcss(), svgr()],
     base: '/ordle/',
     build: {
       outDir: 'dist',
