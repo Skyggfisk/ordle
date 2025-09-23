@@ -17,6 +17,7 @@
     "generate:words:dry": "bun scripts/extractWords.ts --dry-run"
   },
   "dependencies": {
+    "@floating-ui/react": "^0.27.16",
     "i18next": "^25.4.2",
     "i18next-browser-languagedetector": "^8.2.0",
     "react": "^19.1.1",

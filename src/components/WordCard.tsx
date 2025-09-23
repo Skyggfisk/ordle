@@ -4,7 +4,7 @@ export const WordCard = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="mx-auto mt-6 mb-2 max-w-xl rounded-lg bg-amber-50 px-4 py-3 text-left shadow-md dark:bg-stone-900">
+    <div className="mx-auto mb-2 max-w-xl rounded-lg bg-amber-50 px-4 py-3 text-left shadow-md dark:bg-stone-900">
       <span className="mb-1 block text-3xl font-semibold">
         {t('FrontPage.wordCard.title')}{' '}
         <span className="text-lg font-normal text-gray-400">[ˈoɐ̯dlə]</span>

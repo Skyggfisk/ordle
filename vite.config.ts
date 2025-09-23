@@ -11,5 +11,9 @@ export default defineConfig(async () => {
     build: {
       outDir: 'dist',
     },
+    server: {
+      host: '0.0.0.0',
+      port: 5173,
+    },
   };
 });

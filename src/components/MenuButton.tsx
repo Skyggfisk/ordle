@@ -1,43 +1,57 @@
-import type { RefObject, ReactNode, Dispatch, SetStateAction } from 'react';
+import { type ReactNode, useState } from 'react';
+import {
+  useFloating,
+  offset,
+  flip,
+  shift,
+  autoUpdate,
+  useInteractions,
+  useDismiss,
+} from '@floating-ui/react';
 
 interface MenuButtonProps {
-  buttonRef: RefObject<HTMLButtonElement | null>;
-  menuRef: RefObject<HTMLDivElement | null>;
-  showMenu: boolean;
-  setShowMenu: Dispatch<SetStateAction<boolean>>;
   icon: ReactNode;
   label: string;
   children: ReactNode;
 }
 
-export const MenuButton = ({
-  buttonRef,
-  menuRef,
-  showMenu,
-  setShowMenu,
-  icon,
-  label,
-  children,
-}: MenuButtonProps) => {
+export const MenuButton = ({ icon, label, children }: MenuButtonProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const { refs, floatingStyles, context } = useFloating({
+    placement: 'bottom-end',
+    middleware: [offset(8), flip(), shift({ padding: 8 })],
+    whileElementsMounted: autoUpdate,
+    open: isOpen,
+    onOpenChange: setIsOpen,
+  });
+
+  const dismiss = useDismiss(context);
+
+  const { getReferenceProps, getFloatingProps } = useInteractions([dismiss]);
+
   return (
     <div className="relative">
       <button
-        ref={buttonRef}
-        className={`flex cursor-pointer items-center overflow-hidden rounded-full px-3 py-2 text-black transition-all duration-200 dark:text-white hover:[&>span:last-of-type]:ml-2 hover:[&>span:last-of-type]:max-w-[200px] ${showMenu ? 'bg-gray-300 dark:bg-neutral-700' : 'bg-gray-200 dark:bg-neutral-900'} hover:bg-gray-300 dark:hover:bg-neutral-700 hover:[&>span:last-of-type]:opacity-100`}
+        ref={refs.setReference}
+        className={`flex cursor-pointer items-center overflow-hidden rounded-full px-3 py-2 text-black transition-all duration-200 dark:text-white hover:[&>span:last-of-type]:ml-2 hover:[&>span:last-of-type]:max-w-[200px] ${isOpen ? 'bg-gray-300 dark:bg-neutral-700' : 'bg-gray-200 dark:bg-neutral-900'} hover:bg-gray-300 dark:hover:bg-neutral-700 hover:[&>span:last-of-type]:opacity-100`}
         aria-label={label}
-        onClick={() => setShowMenu((v) => !v)}
+        onClick={() => setIsOpen((v) => !v)}
+        {...getReferenceProps()}
       >
         <span className="flex items-center">{icon}</span>
         <span
-          className={`${showMenu ? 'ml-2 max-w-[200px] opacity-100' : 'max-w-0 opacity-0'} text-nowrap transition-all duration-200 sm:inline-block`}
+          className={`${isOpen ? 'ml-2 max-w-[200px] opacity-100' : 'max-w-0 opacity-0'} font-semibold text-nowrap transition-all duration-200 sm:inline-block`}
         >
           {label}
         </span>
       </button>
-      {showMenu && (
+      {isOpen && (
         <div
-          ref={menuRef}
-          className="absolute right-[-50%] z-50 mt-2 w-auto rounded bg-gray-200 px-4 py-3 text-sm text-black shadow-lg sm:right-0 dark:bg-neutral-600 dark:text-white"
+          ref={refs.setFloating}
+          style={floatingStyles}
+          className="z-50 w-max max-w-[calc(100vw-2rem)] rounded bg-gray-200 px-2 py-3 text-sm text-black shadow-lg sm:w-max sm:max-w-md dark:bg-neutral-600 dark:text-white"
+          {...getFloatingProps()}
         >
           {children}
         </div>

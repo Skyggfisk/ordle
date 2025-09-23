@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import FlagGB from '../icons/flag_gb.svg?react';
 import FlagDK from '../icons/flag_dk.svg?react';
 import { FaGlobe, FaQuestionCircle, FaCog } from 'react-icons/fa';
@@ -22,56 +22,6 @@ const applySystemTheme = () => {
 
 export const Header = () => {
   const { t, i18n } = useTranslation();
-
-  // Refs for menus
-  const langMenuRef = useRef<HTMLDivElement>(null);
-  const howToMenuRef = useRef<HTMLDivElement>(null);
-  const settingsMenuRef = useRef<HTMLDivElement>(null);
-  // Refs for buttons
-  const langButtonRef = useRef<HTMLButtonElement>(null);
-  const howToButtonRef = useRef<HTMLButtonElement>(null);
-  const settingsButtonRef = useRef<HTMLButtonElement>(null);
-
-  const [showSettings, setShowSettings] = useState(false);
-  const [showLangSelect, setShowLangSelect] = useState(false);
-  const [showHowTo, setShowHowTo] = useState(false);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      const target = event.target as Node;
-      if (
-        showLangSelect &&
-        langMenuRef.current &&
-        langButtonRef.current &&
-        !langMenuRef.current.contains(target) &&
-        !langButtonRef.current.contains(target)
-      ) {
-        setShowLangSelect(false);
-      }
-      if (
-        showHowTo &&
-        howToMenuRef.current &&
-        howToButtonRef.current &&
-        !howToMenuRef.current.contains(target) &&
-        !howToButtonRef.current.contains(target)
-      ) {
-        setShowHowTo(false);
-      }
-      if (
-        showSettings &&
-        settingsMenuRef.current &&
-        settingsButtonRef.current &&
-        !settingsMenuRef.current.contains(target) &&
-        !settingsButtonRef.current.contains(target)
-      ) {
-        setShowSettings(false);
-      }
-    }
-    window.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      window.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showLangSelect, showHowTo, showSettings]);
 
   // Init state
   const [hardMode, setHardMode] = useState(false);
@@ -125,7 +75,6 @@ export const Header = () => {
 
   const handleLangChange = (newLang: string) => {
     i18n.changeLanguage(newLang);
-    setShowLangSelect(false);
   };
 
   const handleSwitch = (key: 'hardMode', value: boolean) => {
@@ -158,12 +107,8 @@ export const Header = () => {
   };
 
   return (
-    <div className="fixed top-0 right-0 z-50 flex gap-4 p-4">
+    <div className="fixed top-0 right-0 z-50 flex gap-4 p-2">
       <MenuButton
-        buttonRef={howToButtonRef}
-        menuRef={howToMenuRef}
-        showMenu={showHowTo}
-        setShowMenu={setShowHowTo}
         icon={<FaQuestionCircle className="text-lg" />}
         label={t('Header.howToPlay.label')}
       >
@@ -194,10 +139,6 @@ export const Header = () => {
         </div>
       </MenuButton>
       <MenuButton
-        buttonRef={langButtonRef}
-        menuRef={langMenuRef}
-        showMenu={showLangSelect}
-        setShowMenu={setShowLangSelect}
         icon={<FaGlobe className="text-lg" />}
         label={t('Header.language.label')}
       >
@@ -223,10 +164,6 @@ export const Header = () => {
         </ul>
       </MenuButton>
       <MenuButton
-        buttonRef={settingsButtonRef}
-        menuRef={settingsMenuRef}
-        showMenu={showSettings}
-        setShowMenu={setShowSettings}
         icon={<FaCog className="text-lg" />}
         label={t('Header.settings.label')}
       >
@@ -257,7 +194,7 @@ export const Header = () => {
             {Object.values(THEME).map((mode) => (
               <button
                 key={mode}
-                className={`min-w-[120px] flex-1 rounded-lg px-4 py-2 transition-colors ${
+                className={`min-w-max flex-1 rounded-lg px-2 py-1 transition-colors sm:min-w-[120px] sm:px-4 sm:py-2 ${
                   theme === mode
                     ? 'bg-white font-bold text-black shadow dark:bg-neutral-800 dark:text-white'
                     : 'bg-transparent text-gray-700 dark:text-neutral-300'

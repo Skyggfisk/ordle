@@ -18,19 +18,19 @@ export const Game = () => {
   return (
     <>
       {!showGame && !gameOver && (
-        <>
-          <h1 className="text-5xl font-extrabold text-black sm:text-[5rem] dark:text-white">
+        <div className="mx-auto flex w-full max-w-md flex-col items-center space-y-6 px-4 py-8 sm:max-w-full">
+          <h1 className="text-center text-3xl font-extrabold text-black sm:text-5xl dark:text-white">
             {t('FrontPage.title')}
           </h1>
 
-          <p className="text-2xl text-gray-500 dark:text-neutral-400">
+          <p className="text-center text-base text-gray-500 sm:text-2xl dark:text-neutral-400">
             {t('FrontPage.description')}
           </p>
 
           <WordCard />
 
           <StartGameButton onClick={() => setShowGame(true)} />
-        </>
+        </div>
       )}
       {showGame && !gameOver && <GameBoard onGameOver={handleGameOver} />}
       {gameOver && <GameOverScreen />}
