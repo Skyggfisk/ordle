@@ -28,23 +28,27 @@
   }
 }
 
-.flip {
-  animation: flip 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-  animation-delay: var(--flip-delay, 0ms);
-  backface-visibility: hidden;
+.tile-face {
+  @apply absolute flex h-full w-full items-center justify-center text-center backface-hidden;
 }
 
-@keyframes flip {
+.flip {
+  animation: tile-flip 0.6s cubic-bezier(0.4, 0.2, 0.2, 1) both;
+  animation-delay: var(--flip-delay, 0ms);
+}
+
+@keyframes tile-flip {
   0% {
     transform: rotateY(0deg);
   }
-
+  49.99% {
+    transform: rotateY(89.99deg);
+  }
   50% {
     transform: rotateY(90deg);
   }
-
   100% {
-    transform: rotateY(0deg);
+    transform: rotateY(180deg);
   }
 }
 

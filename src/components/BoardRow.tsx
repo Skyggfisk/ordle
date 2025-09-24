@@ -26,10 +26,9 @@ export const BoardRow = ({
           key={letterIdx}
           letter={char}
           feedback={feedback[letterIdx]}
-          revealed={revealed[letterIdx]}
           bounce={bounceTile?.row === rowIdx && bounceTile?.col === letterIdx}
-          flip={feedback[letterIdx] != null}
-          delay={`${letterIdx * 100}ms`}
+          flip={revealed[letterIdx]}
+          delay={`${letterIdx * 120}ms`}
         />
       ))}
     </div>
