@@ -9,6 +9,7 @@ interface BoardRowProps {
   bounceTile: BounceTile;
   rowIdx: number;
   shake: boolean;
+  dance?: boolean;
 }
 
 export const BoardRow = ({
@@ -18,6 +19,7 @@ export const BoardRow = ({
   bounceTile,
   rowIdx,
   shake,
+  dance = false,
 }: BoardRowProps) => {
   return (
     <div className={`flex justify-center gap-1 ${shake ? 'shake' : ''}`}>
@@ -28,7 +30,8 @@ export const BoardRow = ({
           feedback={feedback[letterIdx]}
           bounce={bounceTile?.row === rowIdx && bounceTile?.col === letterIdx}
           flip={revealed[letterIdx]}
-          delay={`${letterIdx * 120}ms`}
+          animationDelay={`${letterIdx * 120}ms`}
+          dance={dance}
         />
       ))}
     </div>

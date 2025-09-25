@@ -25,6 +25,7 @@ export const GameBoard = ({ onGameOver }: GameBoardProps) => {
 
   const [shakeRow, setShakeRow] = useState(false);
   const [bounceTile, setBounceTile] = useState<BounceTile>(null);
+  const [dancingRow, setDancingRow] = useState<number | null>(null);
 
   // Global key handler
   useEffect(() => {
@@ -81,18 +82,34 @@ export const GameBoard = ({ onGameOver }: GameBoardProps) => {
     notify,
   ]);
 
-  // Notify when game is over, after delay
+  // Winning dance trigger after reveal
   useEffect(() => {
-    if (
-      state.gameResult === GAME_RESULT.VICTORY ||
-      state.gameResult === GAME_RESULT.DEFEAT
-    ) {
-      const timer = setTimeout(() => {
+    const gameOverTime = 2000; // 2s default
+    const animationDuration = MAX_WORD_LENGTH * 120 + 600; // 120ms per tile + 600ms buffer
+
+    if (state.gameResult === GAME_RESULT.VICTORY) {
+      // Do the victory dance! (wait for reveal flip)
+      const animationTimer = setTimeout(() => {
+        setDancingRow(state.currentRow - 1);
+      }, animationDuration);
+
+      const gameOverTimer = setTimeout(() => {
         onGameOver();
-      }, 2000);
-      return () => clearTimeout(timer);
+      }, animationDuration + gameOverTime);
+
+      return () => {
+        clearTimeout(animationTimer);
+        clearTimeout(gameOverTimer);
+      };
+    } else if (state.gameResult === GAME_RESULT.DEFEAT) {
+      // Defeat: no dancing :(
+      const gameOverTimer = setTimeout(() => {
+        onGameOver();
+      }, gameOverTime);
+
+      return () => clearTimeout(gameOverTimer);
     }
-  }, [state.gameResult, onGameOver]);
+  }, [state.gameResult, onGameOver, state.currentRow]);
 
   // Get feedback for a specific row
   const getRowFeedback = (rowIdx: number): GuessFeedback[] => {
@@ -117,6 +134,7 @@ export const GameBoard = ({ onGameOver }: GameBoardProps) => {
                 revealed={state.revealedRows[rowIdx]}
                 bounceTile={bounceTile}
                 rowIdx={rowIdx}
+                dance={dancingRow === rowIdx}
               />
             );
           })}

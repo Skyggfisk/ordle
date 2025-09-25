@@ -4,16 +4,18 @@ interface LetterTileProps {
   feedback: GuessFeedback;
   bounce: boolean;
   letter: string;
-  delay: string | undefined;
   flip: boolean;
+  animationDelay?: string;
+  dance?: boolean;
 }
 
 export const LetterTile = ({
   letter,
   bounce,
   feedback,
-  delay,
+  animationDelay,
   flip,
+  dance = false,
 }: LetterTileProps) => {
   // Determine tile color for the back face (feedback)
   let feedbackBg = 'bg-neutral-100 dark:bg-neutral-700';
@@ -23,8 +25,12 @@ export const LetterTile = ({
 
   return (
     <div
-      className={`relative h-12 w-12 border-2 border-neutral-300 text-center text-2xl font-bold select-none perspective-midrange transform-3d dark:border-neutral-400 ${flip ? 'flip' : ''} ${bounce ? 'bounce' : ''}`}
-      style={{ '--flip-delay': delay } as React.CSSProperties}
+      className={`relative h-12 w-12 border-2 border-neutral-300 text-center text-2xl font-bold select-none perspective-midrange transform-3d dark:border-neutral-400 ${flip ? 'flip' : ''} ${bounce ? 'bounce' : ''} ${dance ? 'dance' : ''}`}
+      style={
+        {
+          '--animation-delay': animationDelay,
+        } as React.CSSProperties
+      }
     >
       {/* Front tile face (no feedback) */}
       <div className="tile-face bg-neutral-100 dark:bg-neutral-700">
