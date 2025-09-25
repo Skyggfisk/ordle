@@ -10,6 +10,9 @@ export default defineConfig(async () => {
     base: '/ordle/',
     build: {
       outDir: 'dist',
+      rollupOptions: {
+        external: ['src/service-worker.ts'],
+      },
     },
     server: {
       host: '0.0.0.0',

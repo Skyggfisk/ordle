@@ -4,7 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "build": "tsc -b && vite build",
+    "build:app": "vite build",
+    "build:assets": "bun scripts/generateAssetCacheList.ts",
+    "build:sw": "bun build src/service-worker.ts --outdir ./dist --target browser --minify",
+    "build": "bun run build:app && bun run build:assets && bun run build:sw",
     "check": "bun run lint && bun run typecheck",
     "dev": "vite",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",

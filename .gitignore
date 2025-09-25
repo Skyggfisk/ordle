@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 scripts/*.tsv
+src/asset-cache-list.json
 
 # Editor directories and files
 .vscode/*
