@@ -7,13 +7,23 @@
   <meta name="description" content="A Danish word guessing game">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ordle</title>
-  <script type="module" crossorigin src="/ordle/assets/index-pkRwhxVf.js"></script>
-  <link rel="stylesheet" crossorigin href="/ordle/assets/index-CEpFrMfS.css">
+  <link rel="manifest" href="/ordle/manifest.json" />
+  <script type="module" crossorigin src="/ordle/assets/index-29mHsQCl.js"></script>
+  <link rel="stylesheet" crossorigin href="/ordle/assets/index-BbipMpQX.css">
 </head>
 
 <body>
   <div id="root">
   </div>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/ordle/service-worker.js')
+          .then(reg => console.log('Service Worker registered:', reg))
+          .catch(err => console.log('Service Worker registration failed:', err));
+      });
+    }
+  </script>
 </body>
 
 </html>
