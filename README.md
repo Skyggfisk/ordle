@@ -36,6 +36,17 @@ bun run dev
 
 Vite should display a message with where the app is available, the default address is [http://localhost:5173/ordle/](http://localhost:5173/ordle/).
 
+### 4. Building and running the production version
+
+To build and preview the production version of the app:
+
+```bash
+bun run build
+bun run preview
+```
+
+The build process includes generating an asset cache list using the [generateAssetCacheList](scripts/generateAssetCacheList.ts) script. This is necessary for PWA (Progressive Web App) support, as the service worker uses this list to cache assets for offline functionality.
+
 ---
 
 ## Word Extraction Script
@@ -84,8 +95,15 @@ bun run generate:words
 
 ## Testing
 
-**TODO:**  
-Testing setup and instructions will be added soon.
+The project uses Bun's built-in test runner for running tests. Note that Vitest is not used due to a compatibility issue with Bun (see [GitHub issue](https://github.com/oven-sh/bun/issues/21581)) (updated 26-09-2025).
+
+To run the tests:
+
+```bash
+bun test
+```
+
+The tests are set up using @testing-library/react component testing.
 
 ---
 
