@@ -113,3 +113,5 @@ The tests are set up using @testing-library/react component testing.
   Contributions and suggestions are welcome! Please open issues or pull requests.
 - **License:**  
   [MIT](LICENSE)
+- **Pre-commit checks:**  
+  This project uses pre-commit hooks to run linting and type checking before commits. Use `git commit --no-verify` to skip checks if needed.
