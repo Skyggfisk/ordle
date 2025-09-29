@@ -98,7 +98,10 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
   }
 }
 
-export function validateHardModeGuess(state: GameState, guess: string[]): boolean {
+export function validateHardModeGuess(
+  state: GameState,
+  guess: string[]
+): boolean {
   if (state.currentRow === 0) return true; // No constraints for first guess
 
   const mustInclude = new Set<string>();
