@@ -11,13 +11,13 @@ import {
 } from '../types/game';
 import { storage } from '../services/storage';
 
-const GAME_ACTION = {
+export const GAME_ACTION = {
   ADD_LETTER: 'ADD_LETTER',
   REMOVE_LETTER: 'REMOVE_LETTER',
   SUBMIT_GUESS: 'SUBMIT_GUESS',
 } as const;
 
-type GameAction =
+export type GameAction =
   | { type: typeof GAME_ACTION.ADD_LETTER; letter: string }
   | { type: typeof GAME_ACTION.REMOVE_LETTER }
   | {
@@ -49,7 +49,7 @@ function getInitialState(): GameState {
   return state;
 }
 
-function gameReducer(state: GameState, action: GameAction): GameState {
+export function gameReducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
     case GAME_ACTION.ADD_LETTER:
       return {
@@ -98,7 +98,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
   }
 }
 
-function validateHardModeGuess(state: GameState, guess: string[]): boolean {
+export function validateHardModeGuess(state: GameState, guess: string[]): boolean {
   if (state.currentRow === 0) return true; // No constraints for first guess
 
   const mustInclude = new Set<string>();
