@@ -1,4 +1,4 @@
-import { useReducer, useEffect } from 'react';
+import { useReducer, useEffect, useState } from 'react';
 import { wordService } from '../services/wordService';
 import {
   type CheckGuessResult,
@@ -7,6 +7,7 @@ import {
   GAME_RESULT,
   MAX_ATTEMPT_LIMIT,
   MAX_WORD_LENGTH,
+  FEEDBACK,
 } from '../types/game';
 import { storage } from '../services/storage';
 
@@ -97,8 +98,64 @@ function gameReducer(state: GameState, action: GameAction): GameState {
   }
 }
 
+function validateHardModeGuess(state: GameState, guess: string[]): boolean {
+  if (state.currentRow === 0) return true; // No constraints for first guess
+
+  const mustInclude = new Set<string>();
+  const mustNotInclude = new Set<string>();
+  const positionConstraints: (string | null)[] = Array(MAX_WORD_LENGTH).fill(null);
+
+  // Collect constraints from all previous feedback
+  for (let row = 0; row < state.currentRow; row++) {
+    const feedback = state.feedbackRows[row];
+    const prevGuess = state.guesses[row];
+    for (let col = 0; col < MAX_WORD_LENGTH; col++) {
+      const fb = feedback[col];
+      const letter = prevGuess[col];
+      if (fb === FEEDBACK.GREEN) {
+        // Must be in same position
+        if (positionConstraints[col] && positionConstraints[col] !== letter) {
+          return false; // Conflicting greens, but shouldn't happen
+        }
+        positionConstraints[col] = letter;
+      } else if (fb === FEEDBACK.YELLOW) {
+        mustInclude.add(letter);
+      } else if (fb === FEEDBACK.GREY) {
+        // Only exclude if not required elsewhere
+        if (!mustInclude.has(letter) && !positionConstraints.includes(letter)) {
+          mustNotInclude.add(letter);
+        }
+      }
+    }
+  }
+
+  // Check position constraints
+  for (let col = 0; col < MAX_WORD_LENGTH; col++) {
+    if (positionConstraints[col] && guess[col] !== positionConstraints[col]) {
+      return false;
+    }
+  }
+
+  // Check must include
+  for (const letter of mustInclude) {
+    if (!guess.includes(letter)) {
+      return false;
+    }
+  }
+
+  // Check must not include
+  for (const letter of mustNotInclude) {
+    if (guess.includes(letter)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 export const useGameState = () => {
   const [state, dispatch] = useReducer(gameReducer, undefined, getInitialState);
+  const [hardMode] = useState(() => !!storage.getConfig().hardMode);
 
   // Save game state
   useEffect(() => {
@@ -127,9 +184,13 @@ export const useGameState = () => {
   const submitGuess = (
     guess: string[],
     onResult?: (result: GameResult) => void
-  ) => {
+  ): { success: boolean; reason?: 'invalid_word' | 'hard_mode_violation' } => {
     // Only submit if row is filled
-    if (!guess.every((c) => c !== '')) return;
+    if (!guess.every((c) => c !== '')) return { success: false };
+    // Check hard mode constraints
+    if (hardMode && !validateHardModeGuess(state, guess)) {
+      return { success: false, reason: 'hard_mode_violation' };
+    }
     const checkGuessResult = wordService.checkGuess(guess.join(''));
     if (checkGuessResult.wordExists) {
       dispatch({ type: GAME_ACTION.SUBMIT_GUESS, checkGuessResult });
@@ -138,8 +199,9 @@ export const useGameState = () => {
       } else if (state.currentRow === MAX_ATTEMPT_LIMIT - 1) {
         if (onResult) onResult(GAME_RESULT.DEFEAT);
       }
+      return { success: true };
     }
-    return checkGuessResult.wordExists;
+    return { success: false, reason: 'invalid_word' };
   };
 
   return { state, addLetter, removeLetter, submitGuess };

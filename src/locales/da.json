@@ -56,6 +56,9 @@
     "invalidWord": {
       "notFound": "Ord findes ikke i ordbogen",
       "error": "Fejl ved kontrol af gæt"
+    },
+    "hardMode": {
+      "violation": "Svær tilstand: Gæt skal følge tidligere ledetråde"
     }
   },
   "GameOverScreen": {

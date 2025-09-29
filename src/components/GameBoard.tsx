@@ -49,10 +49,16 @@ export const GameBoard = ({ onGameOver }: GameBoardProps) => {
             }
           }
         );
-        if (submitGuessResult === false) {
-          notify(t('GameBoard.invalidWord.notFound'), {
-            type: NOTIFICATION.INFO,
-          });
+        if (!submitGuessResult.success) {
+          if (submitGuessResult.reason === 'hard_mode_violation') {
+            notify(t('GameBoard.hardMode.violation'), {
+              type: NOTIFICATION.WARNING,
+            });
+          } else {
+            notify(t('GameBoard.invalidWord.notFound'), {
+              type: NOTIFICATION.INFO,
+            });
+          }
           setShakeRow(true);
           setTimeout(() => setShakeRow(false), 600);
           return;

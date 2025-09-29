@@ -56,6 +56,9 @@
     "invalidWord": {
       "notFound": "Word not found in dictionary",
       "error": "Error checking guess"
+    },
+    "hardMode": {
+      "violation": "Hard mode: Guess must follow previous clues"
     }
   },
   "GameOverScreen": {

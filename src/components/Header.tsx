@@ -175,10 +175,9 @@ export const Header = () => {
               checked={hardMode}
               onChange={(e) => handleSwitch('hardMode', e.target.checked)}
               className="sr-only"
-              disabled
             />
             <span
-              className={`ml-2 flex h-5 w-10 cursor-not-allowed items-center rounded-full bg-gray-300 p-1 transition-colors dark:bg-neutral-700 ${hardMode ? 'bg-blue-400' : ''}`}
+              className={`ml-2 flex h-5 w-10 cursor-pointer items-center rounded-full bg-gray-300 p-1 transition-colors dark:bg-neutral-700 ${hardMode ? 'bg-blue-400' : ''}`}
             >
               <span
                 className={`h-4 w-4 transform rounded-full bg-white shadow-md transition-transform dark:bg-neutral-400 ${hardMode ? 'translate-x-5' : ''}`}
