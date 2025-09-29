@@ -54,13 +54,16 @@ export const GameBoard = ({ onGameOver }: GameBoardProps) => {
             notify(t('GameBoard.hardMode.violation'), {
               type: NOTIFICATION.WARNING,
             });
-          } else {
+            setShakeRow(true);
+            setTimeout(() => setShakeRow(false), 600);
+          } else if (submitGuessResult.reason === 'invalid_word') {
             notify(t('GameBoard.invalidWord.notFound'), {
               type: NOTIFICATION.INFO,
             });
+            setShakeRow(true);
+            setTimeout(() => setShakeRow(false), 600);
           }
-          setShakeRow(true);
-          setTimeout(() => setShakeRow(false), 600);
+          // For incomplete guesses or other cases, do nothing
           return;
         }
       } else {

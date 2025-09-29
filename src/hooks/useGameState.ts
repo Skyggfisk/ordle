@@ -1,4 +1,4 @@
-import { useReducer, useEffect, useState } from 'react';
+import { useReducer, useEffect } from 'react';
 import { wordService } from '../services/wordService';
 import {
   type CheckGuessResult,
@@ -103,7 +103,8 @@ function validateHardModeGuess(state: GameState, guess: string[]): boolean {
 
   const mustInclude = new Set<string>();
   const mustNotInclude = new Set<string>();
-  const positionConstraints: (string | null)[] = Array(MAX_WORD_LENGTH).fill(null);
+  const positionConstraints: (string | null)[] =
+    Array(MAX_WORD_LENGTH).fill(null);
 
   // Collect constraints from all previous feedback
   for (let row = 0; row < state.currentRow; row++) {
@@ -155,7 +156,6 @@ function validateHardModeGuess(state: GameState, guess: string[]): boolean {
 
 export const useGameState = () => {
   const [state, dispatch] = useReducer(gameReducer, undefined, getInitialState);
-  const [hardMode] = useState(() => !!storage.getConfig().hardMode);
 
   // Save game state
   useEffect(() => {
@@ -188,7 +188,7 @@ export const useGameState = () => {
     // Only submit if row is filled
     if (!guess.every((c) => c !== '')) return { success: false };
     // Check hard mode constraints
-    if (hardMode && !validateHardModeGuess(state, guess)) {
+    if (storage.getConfig().hardMode && !validateHardModeGuess(state, guess)) {
       return { success: false, reason: 'hard_mode_violation' };
     }
     const checkGuessResult = wordService.checkGuess(guess.join(''));
