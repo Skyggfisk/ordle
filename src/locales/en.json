@@ -12,6 +12,7 @@
     "settings": {
       "label": "Settings",
       "hardMode": "Hard Mode",
+      "hardModeDescription": "Guesses must use previous clues",
       "themeMode": {
         "label": "Theme",
         "light": "Light",

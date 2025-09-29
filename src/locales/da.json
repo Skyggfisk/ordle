@@ -12,6 +12,7 @@
     "settings": {
       "label": "Indstillinger",
       "hardMode": "Svært niveau",
+      "hardModeDescription": "Gæt skal bruge tidligere ledetråde",
       "themeMode": {
         "label": "Tema",
         "light": "Lyst",

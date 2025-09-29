@@ -167,23 +167,29 @@ export const Header = () => {
         icon={<FaCog className="text-lg" />}
         label={t('Header.settings.label')}
       >
-        <div className="mb-2 flex items-center justify-between gap-2">
-          <span className="text-nowrap">{t('Header.settings.hardMode')}</span>
-          <label className="inline-flex cursor-pointer items-center">
-            <input
-              type="checkbox"
-              checked={hardMode}
-              onChange={(e) => handleSwitch('hardMode', e.target.checked)}
-              className="sr-only"
-            />
-            <span
-              className={`ml-2 flex h-5 w-10 cursor-pointer items-center rounded-full bg-gray-300 p-1 transition-colors dark:bg-neutral-700 ${hardMode ? 'bg-blue-400' : ''}`}
-            >
+        <div className="mb-2">
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-nowrap">{t('Header.settings.hardMode')}</span>
+            <label className="inline-flex cursor-pointer items-center">
+              <input
+                type="checkbox"
+                checked={hardMode}
+                onChange={(e) => handleSwitch('hardMode', e.target.checked)}
+                className="sr-only"
+              />
               <span
-                className={`h-4 w-4 transform rounded-full bg-white shadow-md transition-transform dark:bg-neutral-400 ${hardMode ? 'translate-x-5' : ''}`}
-              ></span>
-            </span>
-          </label>
+                className={`ml-2 flex h-5 w-10 cursor-pointer items-center rounded-full p-1 transition-colors ${hardMode ? 'bg-green-500 dark:bg-emerald-600' : 'bg-neutral-300 dark:bg-neutral-700'}`}
+              >
+                <span
+                  className={`h-4 w-4 transform rounded-full bg-white shadow-md transition-transform ${hardMode ? 'translate-x-4 dark:bg-neutral-200' : 'dark:bg-neutral-400'}`}
+                ></span>
+              </span>
+            </label>
+          </div>
+          <div className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">
+            {'> '}
+            {t('Header.settings.hardModeDescription')}
+          </div>
         </div>
         <div className="flex flex-col gap-2">
           <span className="text-nowrap">
