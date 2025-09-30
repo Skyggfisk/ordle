@@ -1,6 +1,5 @@
 import { LetterTile } from './LetterTile';
-
-import type { BounceTile, GuessFeedback } from '../../types/game';
+import type { BounceTile, GuessFeedback } from '~/types/game';
 
 interface BoardRowProps {
   tiles: string[];

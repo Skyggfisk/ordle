@@ -1,6 +1,6 @@
+import { useEffect, useState, type ReactNode } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './i18n';
-import { useEffect, useState, type ReactNode } from 'react';
 
 export const I18nProvider = ({ children }: { children: ReactNode }) => {
   const [mounted, setMounted] = useState(false);

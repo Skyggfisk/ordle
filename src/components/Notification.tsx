@@ -3,7 +3,7 @@ import {
   type NotificationOptions,
   type NotificationType,
   NOTIFICATION,
-} from '../types/notification';
+} from '~/types/notification';
 
 interface NotificationProps {
   message: string;

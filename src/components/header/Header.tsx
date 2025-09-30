@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import FlagGB from '../../icons/flag_gb.svg?react';
-import FlagDK from '../../icons/flag_dk.svg?react';
-import { FaGlobe, FaQuestionCircle, FaCog } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
+import { FaGlobe, FaQuestionCircle, FaCog } from 'react-icons/fa';
+import FlagGB from '~/icons/flag_gb.svg?react';
+import FlagDK from '~/icons/flag_dk.svg?react';
+import { storage, THEME, type OrdleTheme } from '~/services/storage';
 import { MenuButton } from './MenuButton';
-import { storage, THEME, type OrdleTheme } from '../../services/storage';
 
 // Helper to apply system theme
 const getSystemTheme = () => {

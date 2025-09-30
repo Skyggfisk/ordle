@@ -1,7 +1,7 @@
 import { describe, test, expect } from 'bun:test';
 import { render, screen } from '@testing-library/react';
 import { Keyboard, type KeyboardProps } from './Keyboard';
-import { FEEDBACK } from '../../types/game';
+import { FEEDBACK } from '~/types/game';
 
 describe('Keyboard component', () => {
   test('keyboard renders', () => {

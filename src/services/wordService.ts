@@ -1,6 +1,6 @@
-import { words } from '../words';
-import type { CheckGuessResult, GuessFeedback } from '../types/game';
-import { FEEDBACK } from '../types/game';
+import { words } from '~/words';
+import type { CheckGuessResult, GuessFeedback } from '~/types/game';
+import { FEEDBACK } from '~/types/game';
 
 const msPerDay = 1000 * 60 * 60 * 24;
 

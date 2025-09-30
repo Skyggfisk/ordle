@@ -8,6 +8,11 @@ export default defineConfig(async () => {
   return {
     plugins: [react(), tailwindcss(), svgr()],
     base: '/ordle/',
+    resolve: {
+      alias: {
+        '~': '/src',
+      },
+    },
     build: {
       outDir: 'dist',
       rollupOptions: {

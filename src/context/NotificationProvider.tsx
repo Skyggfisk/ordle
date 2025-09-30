@@ -7,8 +7,8 @@ import {
 } from 'react';
 import { NotificationContext } from './NotificationContext';
 import type { NotificationItem } from './NotificationContext';
-import { Notification } from '../components/Notification';
-import { NOTIFICATION, type NotificationOptions } from '../types/notification';
+import { Notification } from '~/components/Notification';
+import { NOTIFICATION, type NotificationOptions } from '~/types/notification';
 
 export const NotificationProvider = ({ children }: { children: ReactNode }) => {
   const [queue, setQueue] = useState<NotificationItem[]>([]);

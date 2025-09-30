@@ -5,7 +5,7 @@ import {
   validateHardModeGuess,
   type GameAction,
 } from './useGameState';
-import { GAME_RESULT, MAX_ATTEMPT_LIMIT, MAX_WORD_LENGTH, FEEDBACK, type GameState } from '../types/game';
+import { GAME_RESULT, MAX_ATTEMPT_LIMIT, MAX_WORD_LENGTH, FEEDBACK, type GameState } from '~/types/game';
 
 describe('gameReducer', () => {
   const initialState: GameState = {
