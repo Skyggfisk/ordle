@@ -1,7 +1,7 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { GameBoard } from './GameBoard';
 import { GameOverScreen } from './GameOverScreen';
-import { useTranslation } from 'react-i18next';
 import { WordCard } from './WordCard';
 import { StartGameButton } from './StartGameButton';
 
