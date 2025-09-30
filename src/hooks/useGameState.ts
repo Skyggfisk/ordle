@@ -1,6 +1,7 @@
 import { useReducer, useEffect } from 'react';
-import { wordService } from '~/services/wordService';
+
 import { storage } from '~/services/storage';
+import { wordService } from '~/services/wordService';
 import {
   type CheckGuessResult,
   type GameResult,

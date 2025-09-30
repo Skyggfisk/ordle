@@ -1,5 +1,6 @@
 import { FEEDBACK, type GuessFeedback } from '~/types/game';
 import { CONTROL_KEYS } from '~/types/keyboard';
+
 import { BackspaceKey } from './BackspaceKey';
 import { EnterKey } from './EnterKey';
 import { LetterKey } from './LetterKey';

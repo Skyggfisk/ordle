@@ -1,4 +1,5 @@
 import { createContext } from 'react';
+
 import type { NotificationOptions } from '~/types/notification';
 
 export interface NotificationItem {

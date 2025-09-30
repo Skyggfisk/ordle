@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { GameBoard } from './GameBoard';
 import { GameOverScreen } from './GameOverScreen';
-import { WordCard } from './WordCard';
 import { StartGameButton } from './StartGameButton';
+import { WordCard } from './WordCard';
 
 export const Game = () => {
   const { t } = useTranslation();

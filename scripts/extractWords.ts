@@ -1,6 +1,7 @@
 import { createReadStream, writeFileSync } from 'fs';
-import { createInterface } from 'readline';
 import { join } from 'path';
+import { createInterface } from 'readline';
+
 import { Command } from 'commander';
 
 async function extractLemmas(

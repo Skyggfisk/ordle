@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'bun:test';
-import { getKeyboardFeedback } from './Keyboard.utils';
+
 import { FEEDBACK } from '~/types/game';
+
+import { getKeyboardFeedback } from './Keyboard.utils';
 
 describe('getKeyboardFeedback', () => {
   it('returns correct feedback for guesses (correct word: DANSK)', () => {

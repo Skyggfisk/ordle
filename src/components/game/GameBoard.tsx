@@ -1,18 +1,22 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Keyboard } from '../keyboard/Keyboard';
-import { getKeyboardFeedback } from '../keyboard/Keyboard.utils';
-import { useNotification } from '~/hooks/useNotification';
+
 import { useGameState } from '~/hooks/useGameState';
-import { BoardRow } from './BoardRow';
+import { useNotification } from '~/hooks/useNotification';
 import {
   GAME_RESULT,
   MAX_WORD_LENGTH,
   type BounceTile,
   type GuessFeedback,
 } from '~/types/game';
-import { NOTIFICATION } from '~/types/notification';
 import { CONTROL_KEYS } from '~/types/keyboard';
+import { NOTIFICATION } from '~/types/notification';
+
+import { Keyboard } from '../keyboard/Keyboard';
+import { getKeyboardFeedback } from '../keyboard/Keyboard.utils';
+
+import { BoardRow } from './BoardRow';
+
 
 interface GameBoardProps {
   onGameOver: () => void;

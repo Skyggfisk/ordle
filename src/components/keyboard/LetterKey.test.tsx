@@ -1,5 +1,6 @@
-import { describe, test, expect, mock } from 'bun:test';
 import { render, screen } from '@testing-library/react';
+import { describe, test, expect, mock } from 'bun:test';
+
 import { LetterKey } from './LetterKey';
 
 describe('LetterKey Component', () => {

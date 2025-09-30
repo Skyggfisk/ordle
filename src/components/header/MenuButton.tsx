@@ -1,4 +1,3 @@
-import { type ReactNode, useState } from 'react';
 import {
   useFloating,
   offset,
@@ -8,6 +7,7 @@ import {
   useInteractions,
   useDismiss,
 } from '@floating-ui/react';
+import { type ReactNode, useState } from 'react';
 
 interface MenuButtonProps {
   icon: ReactNode;
