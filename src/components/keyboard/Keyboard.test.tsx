@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, test, expect } from 'bun:test';
 
-import { FEEDBACK } from '~/types/game';
+import { FEEDBACK } from '@shared-types/game';
 
 import { Keyboard, type KeyboardProps } from './Keyboard';
 

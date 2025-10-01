@@ -1,7 +1,7 @@
 import { useReducer, useEffect } from 'react';
 
-import { storage } from '~/services/storage';
-import { wordService } from '~/services/wordService';
+import { storage } from '@services/storage';
+import { wordService } from '@services/wordService';
 import {
   type CheckGuessResult,
   type GameResult,
@@ -10,7 +10,7 @@ import {
   MAX_ATTEMPT_LIMIT,
   MAX_WORD_LENGTH,
   FEEDBACK,
-} from '~/types/game';
+} from '@shared-types/game';
 
 export const GAME_ACTION = {
   ADD_LETTER: 'ADD_LETTER',

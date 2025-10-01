@@ -6,8 +6,11 @@ import {
   type ReactNode,
 } from 'react';
 
-import { Notification } from '~/components/Notification';
-import { NOTIFICATION, type NotificationOptions } from '~/types/notification';
+import { Notification } from '@components/Notification';
+import {
+  NOTIFICATION,
+  type NotificationOptions,
+} from '@shared-types/notification';
 
 import { NotificationContext } from './NotificationContext';
 import type { NotificationItem } from './NotificationContext';

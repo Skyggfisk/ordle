@@ -34,10 +34,16 @@ export default defineConfig(
             'builtin',
             'external',
             'internal',
-            'parent',
-            'sibling',
-            'index',
+            ['parent', 'sibling', 'index'],
           ],
+          pathGroups: [
+            {
+              pattern:
+                '@components/**|@hooks/**|@shared-types/**|@services/**|@locales/**|@icons/**',
+              group: 'internal',
+            },
+          ],
+          pathGroupsExcludedImportTypes: ['builtin'],
           'newlines-between': 'always',
           alphabetize: {
             order: 'asc',

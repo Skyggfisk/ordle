@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'bun:test';
 
-import { FEEDBACK } from '~/types/game';
+import { FEEDBACK } from '@shared-types/game';
 
 import { getKeyboardFeedback } from './Keyboard.utils';
 

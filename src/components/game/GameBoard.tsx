@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useNotification } from '~/hooks/useNotification';
+import { useNotification } from '@hooks/useNotification';
 import {
   GAME_RESULT,
   MAX_WORD_LENGTH,
@@ -9,14 +9,13 @@ import {
   type GameResult,
   type GameState,
   type GuessFeedback,
-} from '~/types/game';
-import { CONTROL_KEYS } from '~/types/keyboard';
-import { NOTIFICATION } from '~/types/notification';
-
-import { Keyboard } from '../keyboard/Keyboard';
-import { getKeyboardFeedback } from '../keyboard/Keyboard.utils';
+} from '@shared-types/game';
+import { CONTROL_KEYS } from '@shared-types/keyboard';
+import { NOTIFICATION } from '@shared-types/notification';
 
 import { BoardRow } from './BoardRow';
+import { Keyboard } from '../keyboard/Keyboard';
+import { getKeyboardFeedback } from '../keyboard/Keyboard.utils';
 
 interface GameBoardProps {
   state: GameState;

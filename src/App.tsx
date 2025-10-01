@@ -1,5 +1,5 @@
-import { Game } from './components/game/Game';
-import { Header } from './components/header/Header';
+import { Game } from '@components/game/Game';
+import { Header } from '@components/header/Header';
 
 function App() {
   return (

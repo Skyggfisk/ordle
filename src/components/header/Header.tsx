@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaGlobe, FaQuestionCircle, FaCog } from 'react-icons/fa';
 
-import FlagDK from '~/icons/flag_dk.svg?react';
-import FlagGB from '~/icons/flag_gb.svg?react';
-import { storage, THEME, type OrdleTheme } from '~/services/storage';
+import FlagDK from '@icons/flag_dk.svg?react';
+import FlagGB from '@icons/flag_gb.svg?react';
+import { storage, THEME, type OrdleTheme } from '@services/storage';
 
 import { MenuButton } from './MenuButton';
 

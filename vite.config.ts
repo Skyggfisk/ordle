@@ -11,6 +11,12 @@ export default defineConfig(async () => {
     resolve: {
       alias: {
         '~': '/src',
+        '@components': '/src/components',
+        '@hooks': '/src/hooks',
+        '@shared-types': '/src/types',
+        '@services': '/src/services',
+        '@locales': '/src/locales',
+        '@icons': '/src/icons',
       },
     },
     build: {

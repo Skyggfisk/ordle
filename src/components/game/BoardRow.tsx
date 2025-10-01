@@ -1,4 +1,4 @@
-import type { BounceTile, GuessFeedback } from '~/types/game';
+import type { BounceTile, GuessFeedback } from '@shared-types/game';
 
 import { LetterTile } from './LetterTile';
 

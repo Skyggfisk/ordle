@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { useGameState } from '~/hooks/useGameState';
-import { GAME_RESULT, MAX_WORD_LENGTH } from '~/types/game';
+import { useGameState } from '@hooks/useGameState';
+import { GAME_RESULT, MAX_WORD_LENGTH } from '@shared-types/game';
 
 import { GameBoard } from './GameBoard';
 import { GameFront } from './GameFront';

@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 
+import type { NotificationOptions } from '@shared-types/notification';
 import { NotificationContext } from '~/context/NotificationContext';
-import type { NotificationOptions } from '~/types/notification';
 
 export const useNotification = () => {
   const ctx = useContext(NotificationContext);

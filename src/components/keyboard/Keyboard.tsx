@@ -1,5 +1,5 @@
-import { FEEDBACK, type GuessFeedback } from '~/types/game';
-import { CONTROL_KEYS } from '~/types/keyboard';
+import { FEEDBACK, type GuessFeedback } from '@shared-types/game';
+import { CONTROL_KEYS } from '@shared-types/keyboard';
 
 import { BackspaceKey } from './BackspaceKey';
 import { EnterKey } from './EnterKey';

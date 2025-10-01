@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { storage } from '~/services/storage';
-import { wordService } from '~/services/wordService';
-import { GAME_RESULT } from '~/types/game';
+import { storage } from '@services/storage';
+import { wordService } from '@services/wordService';
+import { GAME_RESULT } from '@shared-types/game';
 
 export const GameOverScreen = () => {
   const { t } = useTranslation();

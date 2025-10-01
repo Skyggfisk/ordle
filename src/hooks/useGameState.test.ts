@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'bun:test';
 
-import { GAME_RESULT, MAX_ATTEMPT_LIMIT, MAX_WORD_LENGTH, FEEDBACK, type GameState } from '~/types/game';
+import { GAME_RESULT, MAX_ATTEMPT_LIMIT, MAX_WORD_LENGTH, FEEDBACK, type GameState } from '@shared-types/game';
 
 import {
   gameReducer,
