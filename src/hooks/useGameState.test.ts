@@ -22,6 +22,7 @@ describe('gameReducer', () => {
       .fill(null)
       .map(() => Array(MAX_WORD_LENGTH).fill(false)),
     gameResult: GAME_RESULT.UNSETTLED,
+    started: false,
   };
 
   it('should add a letter to the current row', () => {
@@ -63,6 +64,15 @@ describe('gameReducer', () => {
     const newState = gameReducer(initialState, action);
 
     expect(newState.guesses[0]).toEqual(['', '', '', '', '']);
+  });
+
+  it('should start the game', () => {
+    const action: GameAction = { type: GAME_ACTION.START_GAME };
+    const newState = gameReducer(initialState, action);
+
+    expect(newState.started).toBe(true);
+    expect(newState.currentRow).toBe(0);
+    expect(newState.gameResult).toBe(GAME_RESULT.UNSETTLED);
   });
 
   it('should submit a correct guess and update state', () => {
@@ -139,6 +149,7 @@ describe('validateHardModeGuess', () => {
       .fill(null)
       .map(() => Array(MAX_WORD_LENGTH).fill(false)),
     gameResult: GAME_RESULT.UNSETTLED,
+    started: true,
   };
 
   it('should allow first guess (no constraints)', () => {

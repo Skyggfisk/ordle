@@ -34,4 +34,5 @@ export type GameState = {
   feedbackRows: GuessFeedback[][];
   revealedRows: boolean[][];
   gameResult: GameResult;
+  started: boolean;
 };

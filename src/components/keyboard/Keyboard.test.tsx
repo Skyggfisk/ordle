@@ -5,7 +5,6 @@ import { FEEDBACK } from '~/types/game';
 
 import { Keyboard, type KeyboardProps } from './Keyboard';
 
-
 describe('Keyboard component', () => {
   test('keyboard renders', () => {
     render(<Keyboard />);

@@ -1,40 +1,60 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useEffect, useMemo, useState } from 'react';
+
+import { useGameState } from '~/hooks/useGameState';
+import { GAME_RESULT, MAX_WORD_LENGTH } from '~/types/game';
 
 import { GameBoard } from './GameBoard';
+import { GameFront } from './GameFront';
 import { GameOverScreen } from './GameOverScreen';
-import { StartGameButton } from './StartGameButton';
-import { WordCard } from './WordCard';
+
+type GameScreen = 'front' | 'playing' | 'finished';
 
 export const Game = () => {
-  const { t } = useTranslation();
+  const { state, startGame, addLetter, removeLetter, submitGuess } =
+    useGameState();
 
-  const [showGame, setShowGame] = useState(false);
-  const [gameOver, setGameOver] = useState(false);
+  const [isGameOverAnimating, setIsGameOverAnimating] = useState(false);
 
-  const handleGameOver = () => {
-    setGameOver(true);
-  };
+  useEffect(() => {
+    if (state.gameResult === GAME_RESULT.VICTORY) {
+      setIsGameOverAnimating(true);
+      const animationDuration = MAX_WORD_LENGTH * 120 + 600; // 120ms per tile + 600ms buffer
+      const gameOverTime = 2000;
+      const totalDelay = animationDuration + gameOverTime;
+      const timer = setTimeout(() => setIsGameOverAnimating(false), totalDelay);
+      return () => clearTimeout(timer);
+    } else if (state.gameResult === GAME_RESULT.DEFEAT) {
+      setIsGameOverAnimating(true);
+      const gameOverTime = 2000;
+      const timer = setTimeout(
+        () => setIsGameOverAnimating(false),
+        gameOverTime
+      );
+      return () => clearTimeout(timer);
+    } else {
+      setIsGameOverAnimating(false);
+    }
+  }, [state.gameResult]);
+
+  const screen = useMemo<GameScreen>(() => {
+    if (isGameOverAnimating || state.gameResult === GAME_RESULT.UNSETTLED) {
+      return state.started ? 'playing' : 'front';
+    }
+    return 'finished';
+  }, [state.gameResult, state.started, isGameOverAnimating]);
 
   return (
     <>
-      {!showGame && !gameOver && (
-        <div className="mx-auto flex w-full max-w-md flex-col items-center space-y-6 px-4 py-8 sm:max-w-full">
-          <h1 className="text-center text-3xl font-extrabold text-black sm:text-5xl dark:text-white">
-            {t('FrontPage.title')}
-          </h1>
-
-          <p className="text-center text-base text-gray-500 sm:text-2xl dark:text-neutral-400">
-            {t('FrontPage.description')}
-          </p>
-
-          <WordCard />
-
-          <StartGameButton onClick={() => setShowGame(true)} />
-        </div>
+      {screen === 'front' && <GameFront startGame={startGame} />}
+      {screen === 'playing' && (
+        <GameBoard
+          state={state}
+          addLetter={addLetter}
+          removeLetter={removeLetter}
+          submitGuess={submitGuess}
+        />
       )}
-      {showGame && !gameOver && <GameBoard onGameOver={handleGameOver} />}
-      {gameOver && <GameOverScreen />}
+      {screen === 'finished' && <GameOverScreen />}
     </>
   );
 };

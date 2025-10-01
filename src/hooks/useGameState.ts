@@ -16,6 +16,7 @@ export const GAME_ACTION = {
   ADD_LETTER: 'ADD_LETTER',
   REMOVE_LETTER: 'REMOVE_LETTER',
   SUBMIT_GUESS: 'SUBMIT_GUESS',
+  START_GAME: 'START_GAME',
 } as const;
 
 export type GameAction =
@@ -24,14 +25,20 @@ export type GameAction =
   | {
       type: typeof GAME_ACTION.SUBMIT_GUESS;
       checkGuessResult: CheckGuessResult;
-    };
+    }
+  | { type: typeof GAME_ACTION.START_GAME };
 
 type AddLetterResult = { success: boolean; insertCol: number };
 
 function getInitialState(): GameState {
   const existingGame = storage.getCurrentGameState();
   if (existingGame) {
-    return existingGame;
+    return {
+      ...existingGame,
+      started:
+        existingGame.currentRow > 0 ||
+        existingGame.gameResult !== GAME_RESULT.UNSETTLED,
+    };
   }
   const state = {
     guesses: Array(MAX_ATTEMPT_LIMIT)
@@ -45,6 +52,7 @@ function getInitialState(): GameState {
       .fill(null)
       .map(() => Array(MAX_WORD_LENGTH).fill(false)),
     gameResult: GAME_RESULT.UNSETTLED,
+    started: false,
   };
   storage.setCurrentGameState(state);
   return state;
@@ -93,6 +101,11 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
             : GAME_RESULT.UNSETTLED,
         guesses: state.guesses,
         currentRow: state.currentRow + 1,
+      };
+    case GAME_ACTION.START_GAME:
+      return {
+        ...state,
+        started: true,
       };
     default:
       return state;
@@ -208,5 +221,9 @@ export const useGameState = () => {
     return { success: false, reason: 'invalid_word' };
   };
 
-  return { state, addLetter, removeLetter, submitGuess };
+  const startGame = () => {
+    dispatch({ type: GAME_ACTION.START_GAME });
+  };
+
+  return { state, addLetter, removeLetter, submitGuess, startGame };
 };

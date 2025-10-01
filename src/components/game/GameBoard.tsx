@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useGameState } from '~/hooks/useGameState';
 import { useNotification } from '~/hooks/useNotification';
 import {
   GAME_RESULT,
   MAX_WORD_LENGTH,
   type BounceTile,
+  type GameResult,
+  type GameState,
   type GuessFeedback,
 } from '~/types/game';
 import { CONTROL_KEYS } from '~/types/keyboard';
@@ -17,14 +18,23 @@ import { getKeyboardFeedback } from '../keyboard/Keyboard.utils';
 
 import { BoardRow } from './BoardRow';
 
-
 interface GameBoardProps {
-  onGameOver: () => void;
+  state: GameState;
+  addLetter: (letter: string) => { success: boolean; insertCol: number };
+  removeLetter: () => void;
+  submitGuess: (
+    guess: string[],
+    onResult?: (result: GameResult) => void
+  ) => { success: boolean; reason?: 'invalid_word' | 'hard_mode_violation' };
 }
 
-export const GameBoard = ({ onGameOver }: GameBoardProps) => {
+export const GameBoard = ({
+  state,
+  addLetter,
+  removeLetter,
+  submitGuess,
+}: GameBoardProps) => {
   const { t } = useTranslation();
-  const { state, addLetter, removeLetter, submitGuess } = useGameState();
   const notify = useNotification();
 
   const [shakeRow, setShakeRow] = useState(false);
@@ -97,32 +107,16 @@ export const GameBoard = ({ onGameOver }: GameBoardProps) => {
 
   // Winning dance trigger after reveal
   useEffect(() => {
-    const gameOverTime = 2000; // 2s default
-    const animationDuration = MAX_WORD_LENGTH * 120 + 600; // 120ms per tile + 600ms buffer
-
     if (state.gameResult === GAME_RESULT.VICTORY) {
+      const animationDuration = MAX_WORD_LENGTH * 120 + 600; // 120ms per tile + 600ms buffer
       // Do the victory dance! (wait for reveal flip)
       const animationTimer = setTimeout(() => {
         setDancingRow(state.currentRow - 1);
       }, animationDuration);
 
-      const gameOverTimer = setTimeout(() => {
-        onGameOver();
-      }, animationDuration + gameOverTime);
-
-      return () => {
-        clearTimeout(animationTimer);
-        clearTimeout(gameOverTimer);
-      };
-    } else if (state.gameResult === GAME_RESULT.DEFEAT) {
-      // Defeat: no dancing :(
-      const gameOverTimer = setTimeout(() => {
-        onGameOver();
-      }, gameOverTime);
-
-      return () => clearTimeout(gameOverTimer);
+      return () => clearTimeout(animationTimer);
     }
-  }, [state.gameResult, onGameOver, state.currentRow]);
+  }, [state.gameResult, state.currentRow]);
 
   // Get feedback for a specific row
   const getRowFeedback = (rowIdx: number): GuessFeedback[] => {
