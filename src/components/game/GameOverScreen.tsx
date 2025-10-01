@@ -43,7 +43,6 @@ export const GameOverScreen = () => {
 
   return (
     <div className="flex h-full flex-col items-center justify-center p-8">
-      {/* <h2 className="mb-8 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-3xl font-bold text-transparent"> */}
       <h2 className="mb-8 text-3xl font-bold">
         {result === GAME_RESULT.DEFEAT
           ? t('GameOverScreen.title.defeat')
