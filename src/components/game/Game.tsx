@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 
 import { useGameState } from '@hooks/useGameState';
-import { GAME_RESULT, MAX_WORD_LENGTH } from '@shared-types/game';
+import { GAME_RESULT } from '@shared-types/game';
 
 import { GameBoard } from './GameBoard';
 import { GameFront } from './GameFront';
@@ -14,38 +14,43 @@ export const Game = () => {
     useGameState();
 
   const [isGameOverAnimating, setIsGameOverAnimating] = useState(false);
+  const [screen, setScreen] = useState<GameScreen>(() => {
+    if (isGameOverAnimating || state.gameResult === GAME_RESULT.UNSETTLED) {
+      return state.started ? 'playing' : 'front';
+    }
+    return 'finished';
+  });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (state.gameResult === GAME_RESULT.VICTORY) {
       setIsGameOverAnimating(true);
-      const animationDuration = MAX_WORD_LENGTH * 120 + 600; // 120ms per tile + 600ms buffer
-      const gameOverTime = 2000;
-      const totalDelay = animationDuration + gameOverTime;
-      const timer = setTimeout(() => setIsGameOverAnimating(false), totalDelay);
+      const timer = setTimeout(() => {
+        setIsGameOverAnimating(false);
+        setScreen('finished');
+      }, 4150);
       return () => clearTimeout(timer);
     } else if (state.gameResult === GAME_RESULT.DEFEAT) {
       setIsGameOverAnimating(true);
-      const gameOverTime = 2000;
-      const timer = setTimeout(
-        () => setIsGameOverAnimating(false),
-        gameOverTime
-      );
+      const timer = setTimeout(() => {
+        setIsGameOverAnimating(false);
+        setScreen('finished');
+      }, 2000);
       return () => clearTimeout(timer);
     } else {
       setIsGameOverAnimating(false);
     }
   }, [state.gameResult]);
 
-  const screen = useMemo<GameScreen>(() => {
-    if (isGameOverAnimating || state.gameResult === GAME_RESULT.UNSETTLED) {
-      return state.started ? 'playing' : 'front';
-    }
-    return 'finished';
-  }, [state.gameResult, state.started, isGameOverAnimating]);
-
   return (
     <>
-      {screen === 'front' && <GameFront startGame={startGame} />}
+      {screen === 'front' && (
+        <GameFront
+          startGame={() => {
+            setScreen('playing');
+            startGame();
+          }}
+        />
+      )}
       {screen === 'playing' && (
         <GameBoard
           state={state}

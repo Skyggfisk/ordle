@@ -32,7 +32,6 @@ export type GameState = {
   guesses: string[][];
   currentRow: number;
   feedbackRows: GuessFeedback[][];
-  revealedRows: boolean[][];
   gameResult: GameResult;
   started: boolean;
 };

@@ -39,6 +39,7 @@ export const GameBoard = ({
   const [shakeRow, setShakeRow] = useState(false);
   const [bounceTile, setBounceTile] = useState<BounceTile>(null);
   const [dancingRow, setDancingRow] = useState<number | null>(null);
+  const [animatingRows, setAnimatingRows] = useState<Set<number>>(new Set());
 
   // Global key handler
   useEffect(() => {
@@ -62,7 +63,19 @@ export const GameBoard = ({
             }
           }
         );
-        if (!submitGuessResult.success) {
+        if (submitGuessResult.success) {
+          const currentRow = state.currentRow;
+          setAnimatingRows((prev) => new Set(prev).add(currentRow));
+          setTimeout(
+            () =>
+              setAnimatingRows((prev) => {
+                const newSet = new Set(prev);
+                newSet.delete(currentRow);
+                return newSet;
+              }),
+            1400
+          );
+        } else {
           if (submitGuessResult.reason === 'hard_mode_violation') {
             notify(t('GameBoard.hardMode.violation'), {
               type: NOTIFICATION.WARNING,
@@ -125,6 +138,14 @@ export const GameBoard = ({
     return Array(MAX_WORD_LENGTH).fill(null);
   };
 
+  // Get revealed state for a specific row
+  const getRowRevealed = (rowIdx: number): boolean[] => {
+    if (rowIdx < state.currentRow) {
+      return state.feedbackRows[rowIdx].map((f) => f !== null);
+    }
+    return Array(MAX_WORD_LENGTH).fill(false);
+  };
+
   return (
     <div className="mx-auto flex w-full max-w-md flex-col items-center space-y-6 px-4 py-8 sm:max-w-full">
       <div className="relative mt-8 rounded p-8 dark:text-white">
@@ -137,10 +158,11 @@ export const GameBoard = ({
                 shake={rowIdx === state.currentRow && shakeRow}
                 tiles={guess}
                 feedback={feedback}
-                revealed={state.revealedRows[rowIdx]}
+                revealed={getRowRevealed(rowIdx)}
                 bounceTile={bounceTile}
                 rowIdx={rowIdx}
                 dance={dancingRow === rowIdx}
+                animating={animatingRows.has(rowIdx)}
               />
             );
           })}

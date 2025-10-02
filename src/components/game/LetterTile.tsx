@@ -5,6 +5,7 @@ interface LetterTileProps {
   bounce: boolean;
   letter: string;
   flip: boolean;
+  animateFlip: boolean;
   animationDelay?: string;
   dance?: boolean;
 }
@@ -15,6 +16,7 @@ export const LetterTile = ({
   feedback,
   animationDelay,
   flip,
+  animateFlip = false,
   dance = false,
 }: LetterTileProps) => {
   // Determine tile color for the back face (feedback)
@@ -25,7 +27,7 @@ export const LetterTile = ({
 
   return (
     <div
-      className={`relative h-12 w-12 border-2 border-neutral-300 text-center text-2xl font-bold select-none perspective-midrange transform-3d dark:border-neutral-400 ${flip ? 'flip' : ''} ${bounce ? 'bounce' : ''} ${dance ? 'dance' : ''}`}
+      className={`relative h-12 w-12 border-2 border-neutral-300 text-center text-2xl font-bold select-none perspective-midrange transform-3d dark:border-neutral-400 ${flip ? 'flip' : ''} ${flip && animateFlip ? 'animate' : ''} ${bounce ? 'bounce' : ''} ${dance ? 'dance' : ''}`}
       style={
         {
           '--animation-delay': animationDelay,

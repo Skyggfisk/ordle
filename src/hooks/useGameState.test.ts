@@ -18,9 +18,6 @@ describe('gameReducer', () => {
     feedbackRows: Array(MAX_ATTEMPT_LIMIT)
       .fill(null)
       .map(() => Array(MAX_WORD_LENGTH).fill(null)),
-    revealedRows: Array(MAX_ATTEMPT_LIMIT)
-      .fill(null)
-      .map(() => Array(MAX_WORD_LENGTH).fill(false)),
     gameResult: GAME_RESULT.UNSETTLED,
     started: false,
   };
@@ -91,7 +88,6 @@ describe('gameReducer', () => {
     const newState = gameReducer(stateWithGuess, action);
 
     expect(newState.feedbackRows[0]).toEqual(checkGuessResult.feedback);
-    expect(newState.revealedRows[0]).toEqual([true, true, true, true, true]);
     expect(newState.gameResult).toBe(GAME_RESULT.VICTORY);
     expect(newState.currentRow).toBe(1);
   });
@@ -145,9 +141,6 @@ describe('validateHardModeGuess', () => {
     feedbackRows: Array(MAX_ATTEMPT_LIMIT)
       .fill(null)
       .map(() => Array(MAX_WORD_LENGTH).fill(null)),
-    revealedRows: Array(MAX_ATTEMPT_LIMIT)
-      .fill(null)
-      .map(() => Array(MAX_WORD_LENGTH).fill(false)),
     gameResult: GAME_RESULT.UNSETTLED,
     started: true,
   };

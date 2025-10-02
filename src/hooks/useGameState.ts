@@ -48,9 +48,6 @@ function getInitialState(): GameState {
     feedbackRows: Array(MAX_ATTEMPT_LIMIT)
       .fill(null)
       .map(() => Array(MAX_WORD_LENGTH).fill(null)),
-    revealedRows: Array(MAX_ATTEMPT_LIMIT)
-      .fill(null)
-      .map(() => Array(MAX_WORD_LENGTH).fill(false)),
     gameResult: GAME_RESULT.UNSETTLED,
     started: false,
   };
@@ -90,9 +87,6 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
           r === state.currentRow
             ? (action.checkGuessResult.feedback ?? row)
             : row
-        ),
-        revealedRows: state.revealedRows.map((row, r) =>
-          r === state.currentRow ? row.map(() => true) : row
         ),
         gameResult: action.checkGuessResult.correct
           ? GAME_RESULT.VICTORY

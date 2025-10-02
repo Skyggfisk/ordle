@@ -33,7 +33,15 @@
 }
 
 .flip {
-  animation: tile-flip 0.6s cubic-bezier(0.4, 0.2, 0.2, 1) both;
+  transform: rotateY(0deg);
+}
+
+.flip:not(.animate) {
+  transform: rotateY(180deg);
+}
+
+.flip.animate {
+  animation: tile-flip 0.8s cubic-bezier(0.4, 0.2, 0.2, 1) both;
   animation-delay: var(--animation-delay, 0ms);
 }
 
