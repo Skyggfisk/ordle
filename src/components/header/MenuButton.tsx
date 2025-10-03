@@ -36,6 +36,7 @@ export const MenuButton = ({ icon, label, children }: MenuButtonProps) => {
         ref={refs.setReference}
         className={`flex cursor-pointer items-center overflow-hidden rounded-full px-3 py-2 text-black transition-all duration-200 dark:text-white hover:[&>span:last-of-type]:ml-2 hover:[&>span:last-of-type]:max-w-[200px] ${isOpen ? 'bg-gray-300 dark:bg-neutral-700' : 'bg-gray-200 dark:bg-neutral-900'} hover:bg-gray-300 dark:hover:bg-neutral-700 hover:[&>span:last-of-type]:opacity-100`}
         aria-label={label}
+        aria-expanded={isOpen}
         onClick={() => setIsOpen((v) => !v)}
         {...getReferenceProps()}
       >
@@ -51,6 +52,7 @@ export const MenuButton = ({ icon, label, children }: MenuButtonProps) => {
           ref={refs.setFloating}
           style={floatingStyles}
           className="z-50 w-max max-w-[calc(100vw-2rem)] rounded bg-gray-200 px-2 py-3 text-sm text-black shadow-lg sm:w-max sm:max-w-md dark:bg-neutral-600 dark:text-white"
+          role="menu"
           {...getFloatingProps()}
         >
           {children}

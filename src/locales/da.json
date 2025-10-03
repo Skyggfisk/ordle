@@ -75,5 +75,14 @@
       "defeat": "Bedre held næste gang! Du brugte alle <1>{{count}}</1> gæt. Dagens løsning er"
     },
     "endComment": "Tak fordi du spillede! Tjek tilbage om <1>[{{countdown}}]</1> for det næste ord!"
+  },
+  "aria": {
+    "gameBoard": "Spilbræt",
+    "keyboard": {
+      "keyboard": "Virtuelt tastatur",
+      "letter": "Bogstav {{letter}}",
+      "backspace": "Slet tilbage",
+      "enter": "Enter"
+    }
   }
 }

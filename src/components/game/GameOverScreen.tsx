@@ -67,6 +67,7 @@ export const GameOverScreen = () => {
         <a
           href={`https://ordnet.dk/ddo/ordbog?query=${wotd || 'N/A'}`}
           target="_blank"
+          rel="noreferrer noopener"
           className="ml-1 font-semibold text-blue-500 underline underline-offset-2 transition-colors duration-200 hover:text-purple-600 dark:text-blue-200 dark:hover:text-purple-300"
         >
           {wotd || 'N/A'}

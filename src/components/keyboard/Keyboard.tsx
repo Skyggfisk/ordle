@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 import { FEEDBACK, type GuessFeedback } from '@shared-types/game';
 import { CONTROL_KEYS } from '@shared-types/keyboard';
 
@@ -16,6 +18,7 @@ export interface KeyboardProps {
 }
 
 export const Keyboard = ({ keyFeedback = {} }: KeyboardProps) => {
+  const { t } = useTranslation();
   const getBg = (key: string) => {
     if (keyFeedback[key] === FEEDBACK.GREEN)
       return 'bg-green-600 text-white hover:bg-green-600/40 dark:hover:bg-green-600/80';
@@ -35,6 +38,8 @@ export const Keyboard = ({ keyFeedback = {} }: KeyboardProps) => {
     <div
       data-testid="keyboard"
       className="flex w-full max-w-lg flex-col items-center gap-1 rounded bg-neutral-200/40 p-2 select-none dark:bg-white/10"
+      role="group"
+      aria-label={t('aria.keyboard.keyboard')}
     >
       {KEYS.map((row, rowIdx) => {
         // Add backspace and enter keys to the last row

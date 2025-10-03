@@ -75,5 +75,14 @@
       "defeat": "Better luck next time! You used all <1>{{count}}</1> guesses. Today's solution is"
     },
     "endComment": "Thank you for playing! Check back in <1>[{{countdown}}]</1> for the next word!"
+  },
+  "aria": {
+    "gameBoard": "Game board",
+    "keyboard": {
+      "keyboard": "Virtual keyboard",
+      "letter": "Letter {{letter}}",
+      "backspace": "Backspace",
+      "enter": "Enter"
+    }
   }
 }

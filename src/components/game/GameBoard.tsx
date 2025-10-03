@@ -151,7 +151,10 @@ export const GameBoard = ({
   };
 
   return (
-    <div className="mx-auto flex w-full max-w-md flex-col items-center space-y-6 px-4 py-8 sm:max-w-full">
+    <section
+      className="mx-auto flex w-full max-w-md flex-col items-center space-y-6 px-4 py-8 sm:max-w-full"
+      aria-label={t('aria.gameBoard')}
+    >
       <div className="relative mt-8 rounded p-8 dark:text-white">
         <div className="flex flex-col gap-2">
           {state.guesses.map((guess, rowIdx) => {
@@ -175,6 +178,6 @@ export const GameBoard = ({
       <Keyboard
         keyFeedback={getKeyboardFeedback(state.guesses, state.feedbackRows)}
       />
-    </div>
+    </section>
   );
 };
