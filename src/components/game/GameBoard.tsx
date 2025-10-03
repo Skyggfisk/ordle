@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useNotification } from '@hooks/useNotification';
+import { ANIMATION } from '@shared-types/animation';
 import {
   GAME_RESULT,
   MAX_WORD_LENGTH,
@@ -73,7 +74,7 @@ export const GameBoard = ({
                 newSet.delete(currentRow);
                 return newSet;
               }),
-            1400
+            ANIMATION.CASCADE_TIMEOUT_MS
           );
         } else {
           if (submitGuessResult.reason === 'hard_mode_violation') {
@@ -81,13 +82,13 @@ export const GameBoard = ({
               type: NOTIFICATION.WARNING,
             });
             setShakeRow(true);
-            setTimeout(() => setShakeRow(false), 600);
+            setTimeout(() => setShakeRow(false), ANIMATION.SHAKE_DURATION_MS);
           } else if (submitGuessResult.reason === 'invalid_word') {
             notify(t('GameBoard.invalidWord.notFound'), {
               type: NOTIFICATION.INFO,
             });
             setShakeRow(true);
-            setTimeout(() => setShakeRow(false), 600);
+            setTimeout(() => setShakeRow(false), ANIMATION.SHAKE_DURATION_MS);
           }
           // For incomplete guesses or other cases, do nothing
           return;
@@ -99,7 +100,7 @@ export const GameBoard = ({
             row: state.currentRow,
             col: addLetterResult.insertCol,
           });
-          setTimeout(() => setBounceTile(null), 300);
+          setTimeout(() => setBounceTile(null), ANIMATION.BOUNCE_DURATION_MS);
         }
       }
     };
@@ -120,7 +121,10 @@ export const GameBoard = ({
   // Winning dance trigger after reveal
   useEffect(() => {
     if (state.gameResult === GAME_RESULT.VICTORY) {
-      const animationDuration = MAX_WORD_LENGTH * 120 + 600; // 120ms per tile + 600ms buffer
+      const animationDuration =
+        MAX_WORD_LENGTH * ANIMATION.TILE_FLIP_DELAY_MS +
+        ANIMATION.TILE_FLIP_DURATION_MS +
+        ANIMATION.DANCE_DELAY_MS;
       // Do the victory dance! (wait for reveal flip)
       const animationTimer = setTimeout(() => {
         setDancingRow(state.currentRow - 1);

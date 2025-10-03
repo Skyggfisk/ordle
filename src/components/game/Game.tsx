@@ -1,6 +1,7 @@
 import { useLayoutEffect, useState } from 'react';
 
 import { useGameState } from '@hooks/useGameState';
+import { ANIMATION } from '@shared-types/animation';
 import { GAME_RESULT } from '@shared-types/game';
 
 import { GameBoard } from './GameBoard';
@@ -27,14 +28,14 @@ export const Game = () => {
       const timer = setTimeout(() => {
         setIsGameOverAnimating(false);
         setScreen('finished');
-      }, 4150);
+      }, ANIMATION.VICTORY_TOTAL_DURATION_MS);
       return () => clearTimeout(timer);
     } else if (state.gameResult === GAME_RESULT.DEFEAT) {
       setIsGameOverAnimating(true);
       const timer = setTimeout(() => {
         setIsGameOverAnimating(false);
         setScreen('finished');
-      }, 2000);
+      }, ANIMATION.DEFEAT_DURATION_MS);
       return () => clearTimeout(timer);
     } else {
       setIsGameOverAnimating(false);

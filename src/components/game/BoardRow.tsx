@@ -1,3 +1,4 @@
+import { ANIMATION } from '@shared-types/animation';
 import type { BounceTile, GuessFeedback } from '@shared-types/game';
 
 import { LetterTile } from './LetterTile';
@@ -33,7 +34,7 @@ export const BoardRow = ({
           bounce={bounceTile?.row === rowIdx && bounceTile?.col === letterIdx}
           flip={revealed[letterIdx]}
           animateFlip={animating}
-          animationDelay={`${letterIdx * 150}ms`}
+          animationDelay={`${letterIdx * ANIMATION.TILE_FLIP_DELAY_MS}ms`}
           dance={dance}
         />
       ))}
